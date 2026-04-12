@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>福建招聘日报 - 财务管理 & 环境工程</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #dbeafe;
+            --finance-color: #dc2626;
+            --finance-bg: #fef2f2;
+            --env-color: #16a34a;
+            --env-bg: #f0fdf4;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
+            color: white;
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        .header .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .header .update-time {
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+            opacity: 0.75;
+            background: rgba(255,255,255,0.15);
+            display: inline-block;
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 1rem;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .number {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .stat-item .label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .stat-item.finance .number { color: var(--finance-color); }
+        .stat-item.env .number { color: var(--env-color); }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 0.6rem 1.5rem;
+            border-radius: 25px;
+            border: 2px solid var(--border);
+            background: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .tab:hover { border-color: var(--primary); color: var(--primary); }
+        .tab.active-finance { background: var(--finance-color); color: white; border-color: var(--finance-color); }
+        .tab.active-env { background: var(--env-color); color: white; border-color: var(--env-color); }
+        .tab.active-all { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid;
+        }
+
+        .section-title.finance { border-color: var(--finance-color); }
+        .section-title.env { border-color: var(--env-color); }
+
+        .section-title .icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .section-title.finance .icon { background: var(--finance-bg); }
+        .section-title.env .icon { background: var(--env-bg); }
+
+        .section-title h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .section-title .badge {
+            margin-left: auto;
+            font-size: 0.75rem;
+            padding: 0.15rem 0.75rem;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .section-title.finance .badge { background: var(--finance-bg); color: var(--finance-color); }
+        .section-title.env .badge { background: var(--env-bg); color: var(--env-color); }
+
+        .job-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1rem;
+        }
+
+        .job-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.25rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .job-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .job-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+        }
+
+        .job-card.finance::before { background: var(--finance-color); }
+        .job-card.env::before { background: var(--env-color); }
+
+        .job-card .tag-row {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.75rem;
+        }
+
+        .tag {
+            font-size: 0.7rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .tag.finance { background: var(--finance-bg); color: var(--finance-color); }
+        .tag.env { background: var(--env-bg); color: var(--env-color); }
+        .tag.new { background: #fef3c7; color: #92400e; }
+        .tag.hot { background: #fce7f3; color: #9d174d; }
+
+        .job-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: var(--text);
+        }
+
+        .job-card .company {
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .job-card .meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            flex-wrap: wrap;
+        }
+
+        .job-card .meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .job-card .salary {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-top: 0.5rem;
+        }
+
+        .job-card.finance .salary { color: var(--finance-color); }
+        .job-card.env .salary { color: var(--env-color); }
+
+        .job-card .requirements {
+            margin-top: 0.5rem;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state .emoji { font-size: 3rem; margin-bottom: 1rem; }
+        .empty-state p { font-size: 0.95rem; }
+
+        .tips {
+            margin-top: 2rem;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+
+        .tips h3 {
+            font-size: 0.95rem;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+        }
+
+        .tips ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tips li {
+            font-size: 0.82rem;
+            color: #1e40af;
+            padding: 0.2rem 0;
+            padding-left: 1.2rem;
+            position: relative;
+        }
+
+        .tips li::before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.3rem; }
+            .job-grid { grid-template-columns: 1fr; }
+            .stats-bar { gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>🎯 福建招聘日报</h1>
+    <div class="subtitle">财务管理本科(2026届) · 环境工程硕士(2027届)</div>
+    <div class="update-time" id="updateTime">加载中...</div>
+</div>
+
+<div class="stats-bar">
+    <div class="stat-item finance">
+        <div class="number" id="financeCount">-</div>
+        <div class="label">财务岗位</div>
+    </div>
+    <div class="stat-item env">
+        <div class="number" id="envCount">-</div>
+        <div class="label">环境岗位</div>
+    </div>
+    <div class="stat-item">
+        <div class="number" id="totalCount">-</div>
+        <div class="label">总计岗位</div>
+    </div>
+    <div class="stat-item">
+        <div class="number" id="newCount">-</div>
+        <div class="label">今日新增</div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="tabs">
+        <button class="tab active-all" onclick="filterJobs('all')">📋 全部岗位</button>
+        <button class="tab" onclick="filterJobs('finance')">💰 财务管理</button>
+        <button class="tab" onclick="filterJobs('env')">🌿 环境工程</button>
+    </div>
+
+    <div id="jobList"></div>
+
+    <div class="tips">
+        <h3>📌 求职提醒</h3>
+        <ul>
+            <li>财务管理2026届：重点关注银行校招、企业财务管培生、会计师事务所校招</li>
+            <li>环境工程2027届：可提前关注环保企业实习转正、环评机构校招提前批</li>
+            <li>福建省重点关注：厦门、福州、泉州三大城市，平潭、漳州也有新机会</li>
+            <li>招聘信息每日更新，建议每日查看，及时投递</li>
+        </ul>
+    </div>
+</div>
+
+<div class="footer">
+    <p>福建招聘日报 · 数据来源于网络公开信息 · 仅供参考</p>
+</div>
+
+<script>
+// ========== 招聘数据 ==========
+// 此数据由自动化任务每日更新
+const JOBS_DATA = [
+    // ===== 财务管理类 (2026届本科) =====
+    {
+        id: "fin-001",
+        type: "finance",
+        title: "财务管理培训生",
+        company: "建发集团",
+        city: "厦门",
+        salary: "8K-12K",
+        education: "本科",
+        gradYear: "2026届",
+        tags: ["校招", "管培", "国企"],
+        isNew: true,
+        date: "2026-04-12",
+        requirements: "财务管理/会计学相关专业，本科及以上学历，通过CPA部分科目优先"
+    },
+    {
+        id: "fin-002",
+        type: "finance",
+        title: "财务会计专员",
+        company: "安踏体育",
+        city: "厦门",
+        salary: "7K-10K",
+        education: "本科",
+        gradYear: "2026届",
+        tags: ["校招", "上市公司"],
+        isNew: true,
+        date: "2026-04-12",
+        requirements: "会计学/财务管理专业，熟练使用财务软件，有实习经验优先"
+    },
+    {
+        id: "fin-003",
+        type: "finance",
+        title: "银行综合柜员（校招）",
+        company: "兴业银行福州分行",
+        city: "福州",
+        salary: "6K-9K",
+        education: "本科",
+        gradYear: "2026届",
+        tags: ["校招", "银行", "热门"],
+        isNew: true,
+        date: "2026-04-12",
+        requirements: "财务管理/金融学等专业，本科2026届，需通过银行从业资格考试"
+    },
+    {
+        id: "fin-004",
+        type: "finance",
+        title: "审计助理",
+        company: "毕马威华振会计师事务所",
+        city: "厦门",
+        salary: "8K-13K",
+        education: "本科",
+        gradYear: "2026届",
+        tags: ["校招", "四大", "热门"],
+        isNew: true,
+        date: "2026-04-12",
+        requirements: "会计/审计/财务管理专业，英语CET-6以上，逻辑思维强"
+    },
+    {
+        id: "fin-005",
+        type: "finance",
+        title: "财务管培生",
+        company: "紫金矿业集团",
+        city: "福州",
+        salary: "7K-11K",
+        education: "本科",
+        gradYear: "2026届",
+        tags: ["校招", "上市公司", "矿业"],
+        isNew: false,
+        date: "2026-04-11",
+        requirements: "财务管理/会计学专业，能接受短期外派，有较强数据分析能力"
+    },
+    {
+        id: "fin-006",
+        type: "finance",
+        title: "成本核算专员",
+        company: "宁德时代",
+        city: "宁德",
+        salary: "7K-12K",
+        education: "本科",
+        gradYear: "2026届",
+        tags: ["校招", "新能源", "热门"],
+        isNew: true,
+        date: "2026-04-12",
+        requirements: "财务管理/会计学专业，熟悉成本核算流程，Excel精通"
+    },
+    {
+        id: "fin-007",
+        type: "finance",
+        title: "税务专员",
+        company: "厦门建发股份",
+        city: "厦门",
+        salary: "7K-10K",
+        education: "本科",
+        gradYear: "2026届",
+        tags: ["校招", "国企"],
+        isNew: false,
+        date: "2026-04-10",
+        requirements: "财务管理/税务相关专业，了解税法，有税务师考试经历优先"
+    },
+    {
+        id: "fin-008",
+        type: "finance",
+        title: "出纳/资金专员",
+        company: "特步集团",
+        city: "泉州",
+        salary: "5K-8K",
+        education: "本科",
+        gradYear: "2026届",
+        tags: ["校招", "上市公司"],
+        isNew: false,
+        date: "2026-04-11",
+        requirements: "财务管理专业，细心严谨，有出纳实习经验优先"
+    },
+    {
+        id: "fin-009",
+        type: "finance",
+        title: "财务分析师",
+        company: "厦门国贸控股",
+        city: "厦门",
+        salary: "8K-12K",
+        education: "本科",
+        gradYear: "2026届",
+        tags: ["校招", "国企", "分析"],
+        isNew: true,
+        date: "2026-04-12",
+        requirements: "财务管理/金融学专业，数据敏感度高，熟练使用BI工具优先"
+    },
+    {
+        id: "fin-010",
+        type: "finance",
+        title: "校园招聘-财务方向",
+        company: "福耀玻璃",
+        city: "福州",
+        salary: "6K-10K",
+        education: "本科",
+        gradYear: "2026届",
+        tags: ["校招", "制造业", "上市公司"],
+        isNew: false,
+        date: "2026-04-10",
+        requirements: "财务管理/会计学专业，踏实肯干，有制造业实习经验优先"
+    },
+
+    // ===== 环境工程类 (2027届硕士) =====
+    {
+        id: "env-001",
+        type: "env",
+        title: "环境工程师（校招）",
+        company: "福建省环境保护集团",
+        city: "福州",
+        salary: "9K-14K",
+        education: "硕士",
+        gradYear: "2027届",
+        tags: ["校招", "环保", "国企"],
+        isNew: true,
+        date: "2026-04-12",
+        requirements: "环境工程/环境科学硕士，熟悉环保法规，有环评项目经验优先"
+    },
+    {
+        id: "env-002",
+        type: "env",
+        title: "环境咨询顾问",
+        company: "厦门环保科技有限公司",
+        city: "厦门",
+        salary: "8K-13K",
+        education: "硕士",
+        gradYear: "2027届",
+        tags: ["校招", "咨询"],
+        isNew: true,
+        date: "2026-04-12",
+        requirements: "环境工程硕士，擅长环境监测数据分析，有环评师考试计划优先"
+    },
+    {
+        id: "env-003",
+        type: "env",
+        title: "水处理工程师",
+        company: "中建四局建设发展",
+        city: "福州",
+        salary: "9K-15K",
+        education: "硕士",
+        gradYear: "2027届",
+        tags: ["校招", "央企", "水处理"],
+        isNew: true,
+        date: "2026-04-12",
+        requirements: "环境工程/给排水硕士，熟悉污水处理工艺，能独立完成方案设计"
+    },
+    {
+        id: "env-004",
+        type: "env",
+        title: "EHS工程师",
+        company: "宁德时代",
+        city: "宁德",
+        salary: "10K-16K",
+        education: "硕士",
+        gradYear: "2027届",
+        tags: ["校招", "新能源", "热门", "EHS"],
+        isNew: true,
+        date: "2026-04-12",
+        requirements: "环境工程/安全工程硕士，了解ISO14001体系，有企业EHS实习经验优先"
+    },
+    {
+        id: "env-005",
+        type: "env",
+        title: "环评技术员",
+        company: "福建省环科院",
+        city: "福州",
+        salary: "7K-11K",
+        education: "硕士",
+        gradYear: "2027届",
+        tags: ["校招", "事业单位", "环评"],
+        isNew: false,
+        date: "2026-04-11",
+        requirements: "环境工程硕士，掌握环评技术导则，有环评报告编制经验"
+    },
+    {
+        id: "env-006",
+        type: "env",
+        title: "碳排放管理师",
+        company: "厦门金圆集团",
+        city: "厦门",
+        salary: "9K-14K",
+        education: "硕士",
+        gradYear: "2027届",
+        tags: ["校招", "双碳", "热门"],
+        isNew: true,
+        date: "2026-04-12",
+        requirements: "环境工程/能源相关专业硕士，了解碳交易体系，有碳排放核算经验"
+    },
+    {
+        id: "env-007",
+        type: "env",
+        title: "环境监测工程师",
+        company: "福建省环境监测中心",
+        city: "福州",
+        salary: "7K-12K",
+        education: "硕士",
+        gradYear: "2027届",
+        tags: ["校招", "事业单位"],
+        isNew: false,
+        date: "2026-04-10",
+        requirements: "环境工程硕士，熟悉环境监测分析方法，有实验室操作经验"
+    },
+    {
+        id: "env-008",
+        type: "env",
+        title: "固废处理研发工程师",
+        company: "紫金矿业集团",
+        city: "福州",
+        salary: "10K-16K",
+        education: "硕士",
+        gradYear: "2027届",
+        tags: ["校招", "上市公司", "研发"],
+        isNew: false,
+        date: "2026-04-11",
+        requirements: "环境工程硕士，固废处理方向，有科研论文或项目经验优先"
+    },
+    {
+        id: "env-009",
+        type: "env",
+        title: "环保设计工程师",
+        company: "福建龙净环保",
+        city: "福州",
+        salary: "9K-15K",
+        education: "硕士",
+        gradYear: "2027届",
+        tags: ["校招", "上市公司", "大气治理"],
+        isNew: true,
+        date: "2026-04-12",
+        requirements: "环境工程硕士，大气污染控制方向，熟练使用CAD，有脱硫脱硝设计经验优先"
+    },
+    {
+        id: "env-010",
+        type: "env",
+        title: "环境规划师",
+        company: "厦门大学城乡规划院",
+        city: "厦门",
+        salary: "8K-12K",
+        education: "硕士",
+        gradYear: "2027届",
+        tags: ["校招", "规划"],
+        isNew: false,
+        date: "2026-04-11",
+        requirements: "环境工程/环境规划硕士，GIS技能扎实，有环境规划项目经验"
+    }
+];
+
+// ========== 渲染逻辑 ==========
+let currentFilter = 'all';
+
+function filterJobs(type) {
+    currentFilter = type;
+    // 更新tab样式
+    document.querySelectorAll('.tab').forEach(t => {
+        t.className = 'tab';
+    });
+    if (type === 'all') event.target.classList.add('active-all');
+    else if (type === 'finance') event.target.classList.add('active-finance');
+    else event.target.classList.add('active-env');
+    renderJobs();
+}
+
+function renderJobs() {
+    const container = document.getElementById('jobList');
+    let filtered = currentFilter === 'all' ? JOBS_DATA : JOBS_DATA.filter(j => j.type === currentFilter);
+
+    const financeJobs = filtered.filter(j => j.type === 'finance');
+    const envJobs = filtered.filter(j => j.type === 'env');
+
+    let html = '';
+
+    if (financeJobs.length > 0) {
+        html += `
+        <div class="section-title finance">
+            <div class="icon">💰</div>
+            <h2>财务管理岗位（2026届本科）</h2>
+            <span class="badge">${financeJobs.length} 个岗位</span>
+        </div>
+        <div class="job-grid">
+            ${financeJobs.map(j => renderCard(j)).join('')}
+        </div>`;
+    }
+
+    if (envJobs.length > 0) {
+        html += `
+        <div class="section-title env">
+            <div class="icon">🌿</div>
+            <h2>环境工程岗位（2027届硕士）</h2>
+            <span class="badge">${envJobs.length} 个岗位</span>
+        </div>
+        <div class="job-grid">
+            ${envJobs.map(j => renderCard(j)).join('')}
+        </div>`;
+    }
+
+    if (filtered.length === 0) {
+        html = `
+        <div class="empty-state">
+            <div class="emoji">🔍</div>
+            <p>暂无相关岗位，请稍后再查看</p>
+        </div>`;
+    }
+
+    container.innerHTML = html;
+}
+
+function renderCard(job) {
+    const tagHtml = job.tags.map(t => {
+        if (t === '热门') return `<span class="tag hot">🔥 ${t}</span>`;
+        if (job.isNew && t === '校招') return `<span class="tag new">🆕 今日</span>`;
+        return `<span class="tag ${job.type}">${t}</span>`;
+    }).join('');
+
+    return `
+    <div class="job-card ${job.type}">
+        <div class="tag-row">
+            ${tagHtml}
+        </div>
+        <h3>${job.title}</h3>
+        <div class="company">${job.company}</div>
+        <div class="meta">
+            <span>📍 ${job.city}</span>
+            <span>🎓 ${job.education}</span>
+            <span>📅 ${job.gradYear}</span>
+        </div>
+        <div class="salary">${job.salary}</div>
+        <div class="requirements">📋 ${job.requirements}</div>
+    </div>`;
+}
+
+function updateStats() {
+    const financeCount = JOBS_DATA.filter(j => j.type === 'finance').length;
+    const envCount = JOBS_DATA.filter(j => j.type === 'env').length;
+    const newCount = JOBS_DATA.filter(j => j.isNew).length;
+
+    document.getElementById('financeCount').textContent = financeCount;
+    document.getElementById('envCount').textContent = envCount;
+    document.getElementById('totalCount').textContent = financeCount + envCount;
+    document.getElementById('newCount').textContent = newCount;
+}
+
+function updateTime() {
+    const now = new Date();
+    const dateStr = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;
+    const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
+    const weekDay = weekDays[now.getDay()];
+    document.getElementById('updateTime').textContent = `📅 ${dateStr} 星期${weekDay} 更新`;
+}
+
+// 初始化
+updateTime();
+updateStats();
+renderJobs();
+</script>
+
+</body>
+</html>
