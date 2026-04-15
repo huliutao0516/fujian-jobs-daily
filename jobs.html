@@ -33,7 +33,7 @@
         .header {
             background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
             color: white;
-            padding: 2rem 1.5rem;
+            padding: 2rem 1.5rem 1.2rem;
             text-align: center;
         }
 
@@ -57,6 +57,65 @@
             display: inline-block;
             padding: 0.25rem 1rem;
             border-radius: 20px;
+        }
+
+        /* 日期选择器 */
+        .date-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: rgba(0,0,0,0.15);
+            margin-top: 1rem;
+            border-radius: 12px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .date-nav button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .date-nav button:hover {
+            background: rgba(255,255,255,0.35);
+        }
+
+        .date-nav button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .date-nav .current-date {
+            font-size: 1rem;
+            font-weight: 600;
+            min-width: 160px;
+            text-align: center;
+        }
+
+        .date-nav .date-select {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 0.35rem 0.6rem;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .date-nav .date-select option {
+            background: #1e3a8a;
+            color: white;
         }
 
         .stats-bar {
@@ -190,6 +249,17 @@
         .job-card.finance::before { background: var(--finance-color); }
         .job-card.env::before { background: var(--env-color); }
 
+        /* 截止日期临近卡片边框变色 */
+        .job-card.deadline-urgent {
+            border-color: #f59e0b;
+            background: #fffbeb;
+        }
+        .job-card.deadline-expired {
+            border-color: #ef4444;
+            background: #fef2f2;
+            opacity: 0.7;
+        }
+
         .job-card .tag-row {
             display: flex;
             gap: 0.4rem;
@@ -208,6 +278,14 @@
         .tag.env { background: var(--env-bg); color: var(--env-color); }
         .tag.new { background: #fef3c7; color: #92400e; }
         .tag.hot { background: #fce7f3; color: #9d174d; }
+        .tag.history { background: #f1f5f9; color: #475569; }
+        .tag.urgent { background: #fee2e2; color: #991b1b; animation: pulse-urgent 1.5s infinite; }
+        .tag.expiring { background: #fef3c7; color: #92400e; }
+
+        @keyframes pulse-urgent {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
 
         .job-card h3 {
             font-size: 1rem;
@@ -246,11 +324,86 @@
         .job-card.finance .salary { color: var(--finance-color); }
         .job-card.env .salary { color: var(--env-color); }
 
+        .job-card .time-info {
+            margin-top: 0.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+            font-size: 0.78rem;
+        }
+
+        .job-card .time-info .publish-time {
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+        }
+
+        .job-card .time-info .deadline {
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+            font-weight: 600;
+        }
+
+        .job-card .time-info .deadline.normal { color: var(--env-color); }
+        .job-card .time-info .deadline.warning { color: #d97706; }
+        .job-card .time-info .deadline.urgent { color: #dc2626; }
+        .job-card .time-info .deadline.expired { color: #9ca3af; text-decoration: line-through; }
+
+        .job-card .time-info .countdown {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.72rem;
+        }
+
+        .job-card .time-info .countdown.urgent {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .job-card .time-info .countdown.expired {
+            background: #f1f5f9;
+            color: #9ca3af;
+        }
+
         .job-card .requirements {
             margin-top: 0.5rem;
             font-size: 0.78rem;
             color: var(--text-secondary);
             line-height: 1.5;
+        }
+
+        .job-card .source-link {
+            margin-top: 0.65rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .job-card .source-link a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.78rem;
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.25rem 0.75rem;
+            border: 1px solid var(--primary-light);
+            border-radius: 6px;
+            background: var(--primary-light);
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .job-card .source-link a:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
         }
 
         .empty-state {
@@ -261,6 +414,55 @@
 
         .empty-state .emoji { font-size: 3rem; margin-bottom: 1rem; }
         .empty-state p { font-size: 0.95rem; }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .pagination button {
+            min-width: 40px;
+            height: 40px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 0.6rem;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .pagination button.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            font-weight: 600;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .pagination .page-info {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin: 0 0.5rem;
+        }
 
         .tips {
             margin-top: 2rem;
@@ -290,10 +492,26 @@
         }
 
         .tips li::before {
-            content: '💡';
+            content: '\1F4A1';
             position: absolute;
             left: 0;
         }
+
+        .history-banner {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 12px;
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            color: #92400e;
+        }
+
+        .history-banner .emoji { font-size: 1.2rem; }
+        .history-banner a { color: #1e40af; text-decoration: underline; cursor: pointer; }
 
         .footer {
             text-align: center;
@@ -302,10 +520,179 @@
             font-size: 0.8rem;
         }
 
+        /* ========== 搜索与筛选 ========== */
+        .search-filter-bar {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.6rem 0.9rem 0.6rem 2.4rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            background: var(--bg);
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary);
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .search-box .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1rem;
+            opacity: 0.5;
+        }
+
+        .filter-select {
+            padding: 0.6rem 0.9rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            background: var(--bg);
+            color: var(--text);
+            cursor: pointer;
+            outline: none;
+            min-width: 100px;
+            transition: border-color 0.2s;
+        }
+
+        .filter-select:focus {
+            border-color: var(--primary);
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+        }
+
+        .filter-group label {
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        .filter-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            align-items: center;
+        }
+
+        .filter-tag {
+            padding: 0.3rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .filter-tag:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .filter-tag.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .active-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            align-items: center;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .active-filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            background: var(--primary-light);
+            color: var(--primary);
+            font-size: 0.78rem;
+        }
+
+        .active-filter-chip .remove-filter {
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 0.2rem;
+        }
+
+        .active-filter-chip .remove-filter:hover {
+            color: #dc2626;
+        }
+
+        .clear-all-btn {
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            cursor: pointer;
+            border: 1px solid #fca5a5;
+            background: #fef2f2;
+            color: #dc2626;
+            transition: all 0.2s;
+        }
+
+        .clear-all-btn:hover {
+            background: #fee2e2;
+        }
+
+        .search-result-info {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            padding: 0.3rem 0;
+        }
+
+        .search-result-info strong {
+            color: var(--primary);
+        }
+
         @media (max-width: 600px) {
             .header h1 { font-size: 1.3rem; }
             .job-grid { grid-template-columns: 1fr; }
             .stats-bar { gap: 1rem; }
+            .date-nav { gap: 0.4rem; }
+            .date-nav .current-date { font-size: 0.9rem; min-width: 130px; }
+            .search-filter-bar { flex-direction: column; }
+            .search-box { min-width: 100%; }
+            .filter-group { width: 100%; }
+            .filter-select { flex: 1; }
         }
     </style>
 </head>
@@ -313,8 +700,12 @@
 
 <div class="header">
     <h1>🎯 福建招聘日报</h1>
-    <div class="subtitle">财务管理本科(2026届) · 环境工程硕士(2027届)</div>
-    <div class="update-time" id="updateTime">加载中...</div>
+    <div class="subtitle">财务管理本科(2026届) · 环境工程本科/硕士(2027届)</div>
+    <div class="date-nav">
+        <button id="prevDay" onclick="changeDate(-1)">◀ 前一天</button>
+        <select class="date-select" id="dateSelector" onchange="jumpToDate(this.value)"></select>
+        <button id="nextDay" onclick="changeDate(1)">后一天 ▶</button>
+    </div>
 </div>
 
 <div class="stats-bar">
@@ -328,19 +719,70 @@
     </div>
     <div class="stat-item">
         <div class="number" id="totalCount">-</div>
-        <div class="label">总计岗位</div>
+        <div class="label">累计岗位</div>
     </div>
     <div class="stat-item">
         <div class="number" id="newCount">-</div>
         <div class="label">今日新增</div>
     </div>
+    <div class="stat-item">
+        <div class="number" id="expiringCount">-</div>
+        <div class="label">即将截止</div>
+    </div>
 </div>
 
 <div class="container">
+    <div id="historyBanner"></div>
+
+    <!-- 搜索与筛选 -->
+    <div class="search-filter-bar">
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="搜索岗位名称、公司、要求..." oninput="applyFilters()">
+        </div>
+        <div class="filter-group">
+            <label>🏙️ 城市</label>
+            <select class="filter-select" id="cityFilter" onchange="applyFilters()">
+                <option value="">全部城市</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>💰 薪资</label>
+            <select class="filter-select" id="salaryFilter" onchange="applyFilters()">
+                <option value="">不限薪资</option>
+                <option value="0-5">5K以下</option>
+                <option value="5-8">5K-8K</option>
+                <option value="8-12">8K-12K</option>
+                <option value="12-999">12K以上</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>🎓 学历</label>
+            <select class="filter-select" id="eduFilter" onchange="applyFilters()">
+                <option value="">不限学历</option>
+                <option value="本科">本科</option>
+                <option value="硕士">硕士</option>
+                <option value="大专">大专</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>⏰ 状态</label>
+            <select class="filter-select" id="statusFilter" onchange="applyFilters()">
+                <option value="">全部状态</option>
+                <option value="open">正在招聘</option>
+                <option value="expiring">即将截止</option>
+                <option value="closed">已截止</option>
+            </select>
+        </div>
+    </div>
+    <div class="active-filters" id="activeFilters"></div>
+    <div class="search-result-info" id="searchResultInfo"></div>
+
     <div class="tabs">
         <button class="tab active-all" onclick="filterJobs('all')">📋 全部岗位</button>
         <button class="tab" onclick="filterJobs('finance')">💰 财务管理</button>
         <button class="tab" onclick="filterJobs('env')">🌿 环境工程</button>
+        <button class="tab" onclick="filterJobs('expiring')">⏰ 即将截止</button>
     </div>
 
     <div id="jobList"></div>
@@ -349,376 +791,731 @@
         <h3>📌 求职提醒</h3>
         <ul>
             <li>财务管理2026届：重点关注银行校招、企业财务管培生、会计师事务所校招</li>
-            <li>环境工程2027届：可提前关注环保企业实习转正、环评机构校招提前批</li>
+            <li>环境工程2027届（本科/硕士）：可提前关注环保企业实习转正、环评机构校招提前批</li>
             <li>福建省重点关注：厦门、福州、泉州三大城市，平潭、漳州也有新机会</li>
             <li>招聘信息每日更新，建议每日查看，及时投递</li>
+            <li>支持查看历史日报，可按日期回溯往期岗位信息</li>
+            <li>点击「查看原文」可跳转到招聘来源页面，了解详情并投递</li>
         </ul>
     </div>
 </div>
 
 <div class="footer">
     <p>福建招聘日报 · 数据来源于网络公开信息 · 仅供参考</p>
+    <p style="margin-top:0.3rem;">历史数据自 2026-04-12 起存档</p>
 </div>
 
 <script>
-// ========== 招聘数据 ==========
-// 此数据由自动化任务每日更新
-const JOBS_DATA = [
-    // ===== 财务管理类 (2026届本科) =====
-    {
-        id: "fin-001",
-        type: "finance",
-        title: "财务管理培训生",
-        company: "建发集团",
-        city: "厦门",
-        salary: "8K-12K",
-        education: "本科",
-        gradYear: "2026届",
-        tags: ["校招", "管培", "国企"],
-        isNew: true,
-        date: "2026-04-12",
-        requirements: "财务管理/会计学相关专业，本科及以上学历，通过CPA部分科目优先"
-    },
-    {
-        id: "fin-002",
-        type: "finance",
-        title: "财务会计专员",
-        company: "安踏体育",
-        city: "厦门",
-        salary: "7K-10K",
-        education: "本科",
-        gradYear: "2026届",
-        tags: ["校招", "上市公司"],
-        isNew: true,
-        date: "2026-04-12",
-        requirements: "会计学/财务管理专业，熟练使用财务软件，有实习经验优先"
-    },
-    {
-        id: "fin-003",
-        type: "finance",
-        title: "银行综合柜员（校招）",
-        company: "兴业银行福州分行",
-        city: "福州",
-        salary: "6K-9K",
-        education: "本科",
-        gradYear: "2026届",
-        tags: ["校招", "银行", "热门"],
-        isNew: true,
-        date: "2026-04-12",
-        requirements: "财务管理/金融学等专业，本科2026届，需通过银行从业资格考试"
-    },
-    {
-        id: "fin-004",
-        type: "finance",
-        title: "审计助理",
-        company: "毕马威华振会计师事务所",
-        city: "厦门",
-        salary: "8K-13K",
-        education: "本科",
-        gradYear: "2026届",
-        tags: ["校招", "四大", "热门"],
-        isNew: true,
-        date: "2026-04-12",
-        requirements: "会计/审计/财务管理专业，英语CET-6以上，逻辑思维强"
-    },
-    {
-        id: "fin-005",
-        type: "finance",
-        title: "财务管培生",
-        company: "紫金矿业集团",
-        city: "福州",
-        salary: "7K-11K",
-        education: "本科",
-        gradYear: "2026届",
-        tags: ["校招", "上市公司", "矿业"],
-        isNew: false,
-        date: "2026-04-11",
-        requirements: "财务管理/会计学专业，能接受短期外派，有较强数据分析能力"
-    },
-    {
-        id: "fin-006",
-        type: "finance",
-        title: "成本核算专员",
-        company: "宁德时代",
-        city: "宁德",
-        salary: "7K-12K",
-        education: "本科",
-        gradYear: "2026届",
-        tags: ["校招", "新能源", "热门"],
-        isNew: true,
-        date: "2026-04-12",
-        requirements: "财务管理/会计学专业，熟悉成本核算流程，Excel精通"
-    },
-    {
-        id: "fin-007",
-        type: "finance",
-        title: "税务专员",
-        company: "厦门建发股份",
-        city: "厦门",
-        salary: "7K-10K",
-        education: "本科",
-        gradYear: "2026届",
-        tags: ["校招", "国企"],
-        isNew: false,
-        date: "2026-04-10",
-        requirements: "财务管理/税务相关专业，了解税法，有税务师考试经历优先"
-    },
-    {
-        id: "fin-008",
-        type: "finance",
-        title: "出纳/资金专员",
-        company: "特步集团",
-        city: "泉州",
-        salary: "5K-8K",
-        education: "本科",
-        gradYear: "2026届",
-        tags: ["校招", "上市公司"],
-        isNew: false,
-        date: "2026-04-11",
-        requirements: "财务管理专业，细心严谨，有出纳实习经验优先"
-    },
-    {
-        id: "fin-009",
-        type: "finance",
-        title: "财务分析师",
-        company: "厦门国贸控股",
-        city: "厦门",
-        salary: "8K-12K",
-        education: "本科",
-        gradYear: "2026届",
-        tags: ["校招", "国企", "分析"],
-        isNew: true,
-        date: "2026-04-12",
-        requirements: "财务管理/金融学专业，数据敏感度高，熟练使用BI工具优先"
-    },
-    {
-        id: "fin-010",
-        type: "finance",
-        title: "校园招聘-财务方向",
-        company: "福耀玻璃",
-        city: "福州",
-        salary: "6K-10K",
-        education: "本科",
-        gradYear: "2026届",
-        tags: ["校招", "制造业", "上市公司"],
-        isNew: false,
-        date: "2026-04-10",
-        requirements: "财务管理/会计学专业，踏实肯干，有制造业实习经验优先"
-    },
+// ========== 历史数据存档 ==========
+// 每日数据按日期保存，新增日期追加到 HISTORICAL_DATA 中
+const HISTORICAL_DATA = {
+    // ===== 2026年4月 =====
+    "2026-04-13": [
+        // ===== 财务管理类 (2026届本科) - 银行春招 =====
+        { id: "fin-p01", type: "finance", title: "营业网点业务岗（综合服务）-春招", company: "中国银行福建省分行", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2026届", tags: ["春招", "银行", "四大行"], isNew: false, date: "2026-04-13", publishDate: "2026-03-11", deadline: "2026-05-15", source: "https://fj.huatu.com/2026/0311/2511405.html", sourceName: "华图福建", requirements: "应届本科毕业生，福建131人+厦门41人，综合服务/营销服务/信息科技岗" },
+        { id: "fin-p02", type: "finance", title: "营业网点业务岗（营销服务）-春招", company: "中国银行厦门市分行", city: "厦门", salary: "7K-12K", education: "本科", gradYear: "2026届", tags: ["春招", "银行", "四大行"], isNew: false, date: "2026-04-13", publishDate: "2026-03-11", deadline: "2026-05-15", source: "https://www.boc.cn/aboutboc/bi4/202603/t20260311_25654053.html", sourceName: "中国银行官网", requirements: "应届本科毕业生，厦门41人，先综合服务岗培养后转营销" },
+        { id: "fin-p03", type: "finance", title: "柜面服务岗-春招", company: "中国建设银行福建省分行", city: "福建全省", salary: "7K-11K", education: "本科", gradYear: "2026届", tags: ["春招", "银行", "四大行"], isNew: false, date: "2026-04-13", publishDate: "2026-03-16", deadline: "2026-05-31", source: "https://career.fjnu.edu.cn/a8/b3/c10222a436403/page.htm", sourceName: "福建师范大学就业网", requirements: "本科及以上学历，CET4≥425分，120人，福州/泉州/漳州/三明/南平/龙岩/宁德/莆田" },
+        { id: "fin-p04", type: "finance", title: "综合营销岗-春招", company: "中国建设银行福建省分行", city: "福建全省", salary: "7K-12K", education: "本科", gradYear: "2026届", tags: ["春招", "银行", "四大行"], isNew: false, date: "2026-04-13", publishDate: "2026-03-16", deadline: "2026-05-31", source: "https://career.fjnu.edu.cn/a8/b3/c10222a436403/page.htm", sourceName: "福建师范大学就业网", requirements: "本科及以上学历，CET4≥425分，先柜员岗锻炼后转营销" },
+        { id: "fin-p05", type: "finance", title: "综合财务岗-2026届校招", company: "人保财险福建省分公司", city: "龙岩", salary: "4K-8K", education: "本科", gradYear: "2026届", tags: ["校招", "保险", "央企"], isNew: false, date: "2026-04-13", publishDate: "2026-03-20", deadline: "2026-05-31", source: "https://www.zhaopin.com/jobdetail/CC199590610J40724972706.htm", sourceName: "智联招聘", requirements: "财务管理/会计/审计本科，世界500强央企，龙岩区县" },
+        { id: "fin-p06", type: "finance", title: "综合财务岗-2026届校招", company: "人保财险福建省分公司", city: "福建全省", salary: "4K-8K", education: "本科", gradYear: "2026届", tags: ["校招", "保险", "央企"], isNew: false, date: "2026-04-13", publishDate: "2026-03-20", deadline: "2026-05-31", source: "https://picc.zhiye.com/xiaoyuan", sourceName: "人保财险校招官网", requirements: "财务管理/会计/金融本科，福建省各地市均有岗位，大型国有财产保险公司" },
+        // ===== 财务管理类 (2026届本科) - 国企/事业 =====
+        { id: "fin-p07", type: "finance", title: "财务岗-2026校招", company: "漳州高新区区属国有企业", city: "漳州", salary: "5K-8K", education: "本科", gradYear: "2026届", tags: ["校招", "国企"], isNew: false, date: "2026-04-13", publishDate: "2026-04-07", deadline: "2026-05-15", source: "https://www.quanzhi.com/notice/69d7ea0e9a13e0ea0f8415e3", sourceName: "全职招聘网", requirements: "财务/会计/审计类本科，48人，漳州高新区国企" },
+        { id: "fin-p08", type: "finance", title: "财务管理岗-校招", company: "泉州发展集团有限公司", city: "泉州", salary: "6K-10K", education: "本科", gradYear: "2026届", tags: ["校招", "国企", "已截止"], isNew: false, date: "2026-04-13", publishDate: "2026-03-30", deadline: "2026-04-14", source: "https://hx.kaowu.cn/home/exam-notice/view.html?notice_id=1065", sourceName: "福建省招聘考试报名平台", requirements: "财务管理/会计学本科，泉州大型市属国企，20岗53人" },
+        { id: "fin-p09", type: "finance", title: "财务管理岗-集中招聘", company: "福建中烟工业有限责任公司", city: "厦门/龙岩", salary: "7K-12K", education: "本科", gradYear: "2026届", tags: ["校招", "国企", "烟草"], isNew: false, date: "2026-04-13", publishDate: "2026-03-02", deadline: "2026-05-31", source: "https://fjzy2026.zhaopin.com/tip/index.html", sourceName: "福建中烟校招官网", requirements: "财务管理/会计/审计本科，中国烟草下属企业，厦门/龙岩" },
+        { id: "fin-p10", type: "finance", title: "春招-综合柜员/客户经理", company: "福建海峡银行", city: "福州", salary: "7K-12K", education: "本科", gradYear: "2026届", tags: ["春招", "银行"], isNew: false, date: "2026-04-13", publishDate: "2026-02-26", deadline: "2026-05-31", source: "https://career.xujc.com/2026/0226/c3959a167610/page.htm", sourceName: "厦门大学嘉庚学院就业网", requirements: "2025/2026届本科，90家分支机构，福州为主" },
+        // ===== 环境工程类 (2027届本科/硕士) - 双碳/LCA/ESG重点 =====
+        { id: "env-p01", type: "env", title: "碳计量研究员（校招）", company: "国家碳计量中心（福建）", city: "南平", salary: "7K-12K", education: "硕士", gradYear: "2027届", tags: ["校招", "事业单位", "碳计量", "双碳"], isNew: false, date: "2026-04-13", publishDate: "2026-03-17", deadline: "2026-06-30", source: "https://www.hxrc.com/service/NewsDetail.aspx?id=108535", sourceName: "中国海峡人才市场", requirements: "环境工程/能源/化学硕士，全国首家碳计量事业单位，碳计量技术研究与标准制定" },
+        { id: "env-p02", type: "env", title: "碳排放核算工程师（校招）", company: "四川福蓉科技股份公司（福州基地）", city: "福州", salary: "7K-12K", education: "本科", gradYear: "2027届", tags: ["校招", "上市公司", "碳排放", "双碳"], isNew: false, date: "2026-04-13", publishDate: "2026-04-07", deadline: "2026-06-30", source: "https://jyzx.swpu.edu.cn/detail/online?id=3458926", sourceName: "西南石油大学就业网", requirements: "环境工程/材料/化学本科，福州罗源湾基地，聚焦碳达峰碳中和新兴市场" },
+        { id: "env-p03", type: "env", title: "碳排放管理师（校招）", company: "新奥能源福建公司", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["校招", "民企", "碳排放", "双碳"], isNew: false, date: "2026-04-13", publishDate: "2026-03-12", deadline: "2026-06-30", source: "https://www.zhipin.com/job_detail/8d59a2563db4cc2c1HF93d28FlVX.html", sourceName: "BOSS直聘", requirements: "环境/能源/化工本科，碳排放核算/碳资产管理/碳交易，大型综合能源服务商" },
+        { id: "env-p04", type: "env", title: "绿色低碳咨询顾问（校招）", company: "福建省招标采购集团", city: "福州", salary: "7K-12K", education: "硕士", gradYear: "2027届", tags: ["校招", "国企", "双碳", "咨询"], isNew: false, date: "2026-04-13", publishDate: "2026-04-05", deadline: "2026-06-30", source: "https://www.quanzhi.com/notice/69261f0e948a6fcaffb0e5c4", sourceName: "全职招聘网", requirements: "环境工程/能源经济硕士，省管国企，绿色低碳/碳达峰方案咨询" },
+        // ===== 环境工程类 - EHS/环保/水处理 =====
+        { id: "env-p05", type: "env", title: "环保技术岗（2026集中招聘）", company: "福建中烟工业有限责任公司", city: "厦门/龙岩", salary: "7K-12K", education: "本科", gradYear: "2027届", tags: ["校招", "国企", "环保", "烟草"], isNew: false, date: "2026-04-13", publishDate: "2026-03-02", deadline: "2026-05-31", source: "https://fjzy2026.zhaopin.com/job/index.html", sourceName: "福建中烟校招官网", requirements: "环境工程/安全工程本科，烟草行业国企EHS管理" },
+        { id: "env-p06", type: "env", title: "环境工程师助理", company: "中环智慧环境有限公司", city: "福州", salary: "7K-14K", education: "硕士", gradYear: "2027届", tags: ["校招", "上市公司", "环保"], isNew: false, date: "2026-04-13", publishDate: "2026-04-01", deadline: "2026-06-30", source: "https://www.zhaopin.com/sou/jl681/kwEENLH0QTSLT0M", sourceName: "智联招聘", requirements: "环境工程硕士，固废/土壤/工程设计，13薪，福州仓山" },
+        { id: "env-p07", type: "env", title: "环境监测技术员-春招", company: "福建省环境监测中心", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["春招", "事业单位", "监测"], isNew: false, date: "2026-04-13", publishDate: "2026-04-01", deadline: "2026-05-15", source: "http://hrr.mee.gov.cn/", sourceName: "环保部人才招聘系统", requirements: "环境工程/分析化学本科，生态环境部直属事业单位" },
+        { id: "env-p08", type: "env", title: "绿色能源运营岗-校招", company: "时代绿色能源有限公司（宁德时代子公司）", city: "宁德", salary: "8K-14K", education: "本科", gradYear: "2027届", tags: ["校招", "上市公司", "新能源", "碳中和"], isNew: false, date: "2026-04-13", publishDate: "2026-03-25", deadline: "2026-06-30", source: "https://hr.bjx.com.cn/companys/113972/jobs_0_0_0_0_11/", sourceName: "北极星光伏招聘网", requirements: "环境工程/新能源本科，宁德时代全资子公司，绿色电力交易/碳中和" },
+        { id: "env-p09", type: "env", title: "审计岗（环保方向）-校招", company: "福建中闽水务投资集团", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["校招", "国企", "水务"], isNew: false, date: "2026-04-13", publishDate: "2026-04-01", deadline: "2026-05-31", source: "https://www.shushuqiuzhi.com/article/149226", sourceName: "鼠鼠求职", requirements: "环境工程/审计/财务本科，省属水务国企，含审计岗和投资开发岗" },
+        { id: "env-p10", type: "env", title: "ESG/双碳咨询顾问（实习）", company: "德勤中国（厦门分所）", city: "厦门", salary: "4K-7K", education: "本科", gradYear: "2027届", tags: ["实习", "四大", "ESG", "双碳"], isNew: false, date: "2026-04-13", publishDate: "2026-04-10", deadline: "2026-06-30", source: "https://www.deloitte.com/cn/zh/careers/explore-your-fit/students/graduate-program.html", sourceName: "德勤中国官网", requirements: "环境/可持续发展/经济本科，四大ESG咨询实习，英语CET-6以上" },
+        // ===== 更多ESG/双碳方向 =====
+        { id: "env-p11", type: "env", title: "碳足迹核算专员（校招）", company: "空天碳科技（福建）有限公司", city: "福州", salary: "7K-12K", education: "本科", gradYear: "2027届", tags: ["校招", "碳足迹", "双碳", "LCA"], isNew: false, date: "2026-04-13", publishDate: "2026-04-08", deadline: "2026-06-30", source: "https://www.zhipin.com/gongsi/1274ef6acd4c137d1XZ-29m9FFY~.html", sourceName: "BOSS直聘", requirements: "环境工程/化学工程本科，产品碳足迹核算/ISO14067，福州高新区" },
+        { id: "env-p12", type: "env", title: "碳排放核查助理（校招）", company: "福建省低碳发展促进中心", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["校招", "事业单位", "碳排放核查"], isNew: false, date: "2026-04-13", publishDate: "2026-03-25", deadline: "2026-05-31", source: "https://tanjob.bjx.com.cn/search/result/?kw=%E7%A2%B3%E6%A0%B8%E6%9F%A5&hot=home", sourceName: "北极星碳管理招聘网", requirements: "环境/能源本科，碳排放核查/碳足迹计算，福建省碳市场支撑单位" },
+    ],
 
-    // ===== 环境工程类 (2027届硕士) =====
-    {
-        id: "env-001",
-        type: "env",
-        title: "环境工程师（校招）",
-        company: "福建省环境保护集团",
-        city: "福州",
-        salary: "9K-14K",
-        education: "硕士",
-        gradYear: "2027届",
-        tags: ["校招", "环保", "国企"],
-        isNew: true,
-        date: "2026-04-12",
-        requirements: "环境工程/环境科学硕士，熟悉环保法规，有环评项目经验优先"
-    },
-    {
-        id: "env-002",
-        type: "env",
-        title: "环境咨询顾问",
-        company: "厦门环保科技有限公司",
-        city: "厦门",
-        salary: "8K-13K",
-        education: "硕士",
-        gradYear: "2027届",
-        tags: ["校招", "咨询"],
-        isNew: true,
-        date: "2026-04-12",
-        requirements: "环境工程硕士，擅长环境监测数据分析，有环评师考试计划优先"
-    },
-    {
-        id: "env-003",
-        type: "env",
-        title: "水处理工程师",
-        company: "中建四局建设发展",
-        city: "福州",
-        salary: "9K-15K",
-        education: "硕士",
-        gradYear: "2027届",
-        tags: ["校招", "央企", "水处理"],
-        isNew: true,
-        date: "2026-04-12",
-        requirements: "环境工程/给排水硕士，熟悉污水处理工艺，能独立完成方案设计"
-    },
-    {
-        id: "env-004",
-        type: "env",
-        title: "EHS工程师",
-        company: "宁德时代",
-        city: "宁德",
-        salary: "10K-16K",
-        education: "硕士",
-        gradYear: "2027届",
-        tags: ["校招", "新能源", "热门", "EHS"],
-        isNew: true,
-        date: "2026-04-12",
-        requirements: "环境工程/安全工程硕士，了解ISO14001体系，有企业EHS实习经验优先"
-    },
-    {
-        id: "env-005",
-        type: "env",
-        title: "环评技术员",
-        company: "福建省环科院",
-        city: "福州",
-        salary: "7K-11K",
-        education: "硕士",
-        gradYear: "2027届",
-        tags: ["校招", "事业单位", "环评"],
-        isNew: false,
-        date: "2026-04-11",
-        requirements: "环境工程硕士，掌握环评技术导则，有环评报告编制经验"
-    },
-    {
-        id: "env-006",
-        type: "env",
-        title: "碳排放管理师",
-        company: "厦门金圆集团",
-        city: "厦门",
-        salary: "9K-14K",
-        education: "硕士",
-        gradYear: "2027届",
-        tags: ["校招", "双碳", "热门"],
-        isNew: true,
-        date: "2026-04-12",
-        requirements: "环境工程/能源相关专业硕士，了解碳交易体系，有碳排放核算经验"
-    },
-    {
-        id: "env-007",
-        type: "env",
-        title: "环境监测工程师",
-        company: "福建省环境监测中心",
-        city: "福州",
-        salary: "7K-12K",
-        education: "硕士",
-        gradYear: "2027届",
-        tags: ["校招", "事业单位"],
-        isNew: false,
-        date: "2026-04-10",
-        requirements: "环境工程硕士，熟悉环境监测分析方法，有实验室操作经验"
-    },
-    {
-        id: "env-008",
-        type: "env",
-        title: "固废处理研发工程师",
-        company: "紫金矿业集团",
-        city: "福州",
-        salary: "10K-16K",
-        education: "硕士",
-        gradYear: "2027届",
-        tags: ["校招", "上市公司", "研发"],
-        isNew: false,
-        date: "2026-04-11",
-        requirements: "环境工程硕士，固废处理方向，有科研论文或项目经验优先"
-    },
-    {
-        id: "env-009",
-        type: "env",
-        title: "环保设计工程师",
-        company: "福建龙净环保",
-        city: "福州",
-        salary: "9K-15K",
-        education: "硕士",
-        gradYear: "2027届",
-        tags: ["校招", "上市公司", "大气治理"],
-        isNew: true,
-        date: "2026-04-12",
-        requirements: "环境工程硕士，大气污染控制方向，熟练使用CAD，有脱硫脱硝设计经验优先"
-    },
-    {
-        id: "env-010",
-        type: "env",
-        title: "环境规划师",
-        company: "厦门大学城乡规划院",
-        city: "厦门",
-        salary: "8K-12K",
-        education: "硕士",
-        gradYear: "2027届",
-        tags: ["校招", "规划"],
-        isNew: false,
-        date: "2026-04-11",
-        requirements: "环境工程/环境规划硕士，GIS技能扎实，有环境规划项目经验"
+    "2026-04-12": [
+        // ===== 财务管理类 (2026届本科) - 大型企业 =====
+        { id: "fin-001", type: "finance", title: "财务会计-2026届校招", company: "福耀玻璃工业集团", city: "福州", salary: "6.5K-7.5K", education: "本科", gradYear: "2026届", tags: ["校招", "制造业", "上市公司"], isNew: false, date: "2026-04-12", publishDate: "2026-03-13", deadline: "2026-05-31", source: "https://www.ncss.cn/student/jobs/7yGJRKuShdpFM9DuK9qbp2/detail.html", sourceName: "国家大学生就业服务平台", requirements: "财务管理/会计/金融等相关专业，本科/硕士，英语四级及以上，擅长沟通表达" },
+        { id: "fin-002", type: "finance", title: "财务会计-2026届校招", company: "福耀玻璃工业集团", city: "福州", salary: "7K-12K", education: "本科", gradYear: "2026届", tags: ["校招", "制造业", "上市公司"], isNew: false, date: "2026-04-12", publishDate: "2026-03-04", deadline: "2026-05-31", source: "https://fjut.jysd.com/job/view/id/2378299", sourceName: "福建理工大学就业网", requirements: "会计学/财务管理专业，本科/硕士，英语四级及以上，财务核算、账务处理、报表编制" },
+        { id: "fin-004", type: "finance", title: "财务管理岗", company: "广州立白企业集团（福建省）", city: "厦门", salary: "8K-12K", education: "本科", gradYear: "2026届", tags: ["校招", "民企", "快消"], isNew: false, date: "2026-04-12", publishDate: "2026-03-17", deadline: "2026-05-15", source: "https://caiwukuaiji.51job.com/fujiansheng/", sourceName: "前程无忧", requirements: "财务管理/会计学专业，本科，五险一金+补充医疗+餐补+年终奖" },
+        // ===== 财务管理类 (2026届本科) - 中小企业 =====
+        { id: "fin-005", type: "finance", title: "财务专员", company: "福建五持恒科技股份有限公司", city: "泉州", salary: "4K-6K", education: "本科", gradYear: "2026届", tags: ["校招", "民企", "科技"], isNew: false, date: "2026-04-12", publishDate: "2026-02-07", deadline: "2026-05-31", source: "https://www.qzjob.cn/job/J250207110639863E.html", sourceName: "泉州人才网", requirements: "财务/会计相关专业，本科，负责日常账务处理和报表编制" },
+        { id: "fin-006", type: "finance", title: "财务统计兼出纳", company: "福建海星旺食品有限公司", city: "漳州", salary: "4K-5K", education: "本科", gradYear: "2026届", tags: ["校招", "民企", "食品"], isNew: false, date: "2026-04-12", publishDate: "2026-03-20", deadline: "2026-05-20", source: "https://www.zhaopin.com/jobdetail/CCL1462336050J40684724116.htm", sourceName: "智联招聘", requirements: "财务/统计相关专业，本科，负责日常出纳和统计工作" },
+        { id: "fin-008", type: "finance", title: "校园招聘-财务方向", company: "福建省招标采购集团", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2026届", tags: ["校招", "国企"], isNew: false, date: "2026-04-12", publishDate: "2026-04-05", deadline: "2026-05-31", source: "https://www.quanzhi.com/notice/69261f0e948a6fcaffb0e5c4", sourceName: "全职招聘网", requirements: "财务/会计/审计相关专业，本科，国企校招，投递邮箱fjzbhr@163.com" },
+        { id: "fin-009", type: "finance", title: "税务系统2026届校招", company: "国家税务总局福建省税务局", city: "福建全省", salary: "面议", education: "本科", gradYear: "2026届", tags: ["校招", "公务员", "热门"], isNew: false, date: "2026-04-12", publishDate: "2026-03-24", deadline: "2026-04-30", source: "https://www.quanzhi.com/notice/69bd7c593e67084e25eaaf5d", sourceName: "全职招聘网", requirements: "不限专业可投，本科2026届应届毕业生，国家公务员编制" },
+        { id: "fin-011", type: "finance", title: "财务实习生", company: "厦门多家企业", city: "厦门", salary: "3K-5K", education: "本科", gradYear: "2026届", tags: ["实习", "民企"], isNew: false, date: "2026-04-12", publishDate: "2026-04-10", deadline: "2026-06-30", source: "https://www.zhipin.com/zhaopin/1fbd8d181753523703x83dW7Eg~~/", sourceName: "BOSS直聘", requirements: "财务管理/会计专业应届生，厦门多家企业招聘财务实习生" },
+        { id: "fin-012", type: "finance", title: "会计/出纳岗", company: "福建省属事业单位", city: "福州", salary: "面议", education: "本科", gradYear: "2026届", tags: ["事业单位", "编制"], isNew: false, date: "2026-04-12", publishDate: "2026-03-19", deadline: "2026-04-30", source: "https://rst.fj.gov.cn/zwgk/rsxx/", sourceName: "福建省人社厅", requirements: "会计/审计类专业，本科及以上，福建省属事业单位公开招聘" },
+        // ===== 环境工程类 (2027届硕士) - 大型企业 =====
+        { id: "env-001", type: "env", title: "咨询技术岗（环评方向）", company: "福建省金皇环保科技有限公司", city: "福州", salary: "8K-14K", education: "硕士", gradYear: "2027届", tags: ["校招", "环保", "国企", "环评"], isNew: false, date: "2026-04-12", publishDate: "2025-11-20", deadline: "2026-06-30", source: "https://pjcareer.dlut.edu.cn/info/1051/32041.htm", sourceName: "大连理工大学就业网", requirements: "环境生态类/大气科学类/化工类硕士，5人，有环评工程师证可放宽至本科" },
+        { id: "env-002", type: "env", title: "环保管家咨询技术岗", company: "福建省金皇环保科技有限公司", city: "福州", salary: "8K-14K", education: "硕士", gradYear: "2027届", tags: ["校招", "环保", "国企", "管家"], isNew: false, date: "2026-04-12", publishDate: "2025-11-20", deadline: "2026-06-30", source: "https://pjcareer.dlut.edu.cn/info/1051/32041.htm", sourceName: "大连理工大学就业网", requirements: "环境生态类/核科学类硕士，5人，持有勘察设计注册工程师证书优先" },
+        { id: "env-003", type: "env", title: "研发工程师", company: "福建省金皇环保科技有限公司", city: "福州", salary: "10K-18K", education: "硕士", gradYear: "2027届", tags: ["校招", "环保", "研发"], isNew: false, date: "2026-04-12", publishDate: "2025-11-20", deadline: "2026-06-30", source: "https://pjcareer.dlut.edu.cn/info/1051/32041.htm", sourceName: "大连理工大学就业网", requirements: "环境生态类/机械/化学类硕士，需有JCR二区论文或发明专利，1人" },
+        { id: "env-004", type: "env", title: "规划与政策研究咨询岗", company: "福建省金皇环保科技有限公司", city: "福州", salary: "8K-13K", education: "硕士", gradYear: "2027届", tags: ["校招", "环保", "政策研究"], isNew: false, date: "2026-04-12", publishDate: "2025-11-20", deadline: "2026-06-30", source: "https://pjcareer.dlut.edu.cn/info/1051/32041.htm", sourceName: "大连理工大学就业网", requirements: "环境生态类/大气科学/海洋科学硕士，3人，有环保政策制定经验优先" },
+        { id: "env-005", type: "env", title: "环境咨询技术岗", company: "福建省招标采购集团", city: "福州", salary: "7K-12K", education: "硕士", gradYear: "2027届", tags: ["校招", "国企", "环保"], isNew: false, date: "2026-04-12", publishDate: "2026-04-05", deadline: "2026-05-31", source: "https://www.quanzhi.com/notice/69261f0e948a6fcaffb0e5c4", sourceName: "全职招聘网", requirements: "环境工程/环境科学硕士，集团下属福建省环境保护设计院，甲级资质" },
+        // ===== 环境工程类 (2027届硕士) - 中小企业 =====
+        { id: "env-006", type: "env", title: "水处理工艺工程师", company: "大渊环境技术（厦门）有限公司", city: "厦门", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["校招", "民企", "水处理"], isNew: false, date: "2026-04-12", publishDate: "2026-04-01", deadline: "2026-06-30", source: "https://hr.bjx.com.cn/jobs/635522.html", sourceName: "北极星水处理招聘网", requirements: "环境工程/给排水本科及以上，负责给水厂/污水厂工艺设计，五险一金" },
+        { id: "env-007", type: "env", title: "工业废水处理工程师", company: "福建省蓝深环保技术股份有限公司", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["校招", "民企", "水处理"], isNew: false, date: "2026-04-12", publishDate: "2026-03-15", deadline: "2026-06-30", source: "https://jobs.zhaopin.com/CZ299576030J00202995004.htm", sourceName: "智联招聘", requirements: "环境工程/化工/水资源相关专业，本科，负责工业废水工艺方案设计" },
+        { id: "env-008", type: "env", title: "水处理运营管培生", company: "逸辰环保科技（厦门）有限公司", city: "龙岩", salary: "5K-7K", education: "本科", gradYear: "2027届", tags: ["校招", "民企", "管培"], isNew: false, date: "2026-04-12", publishDate: "2026-03-20", deadline: "2026-06-30", source: "http://www.zhaopin.com/jobdetail/CC818326060J40647870906.htm", sourceName: "智联招聘", requirements: "环境工程/机电专业优先，本科，包住+餐补+带薪年假，晋升路线清晰" },
+        { id: "env-009", type: "env", title: "环保工程师（应届生）", company: "福建安冠环境科技有限公司", city: "莆田", salary: "5K-6K", education: "本科", gradYear: "2027届", tags: ["校招", "民企", "环保"], isNew: false, date: "2026-04-12", publishDate: "2026-02-15", deadline: "2026-05-31", source: "http://scl.hbjob88.com/jobs/53019358.html", sourceName: "一览·水处理英才网", requirements: "环境工程专业，大专以上，五险一金+餐补，负责污水处理站运行管理" },
+        { id: "env-010", type: "env", title: "环保工程技术员", company: "科煌生态", city: "福州", salary: "5K-8K", education: "本科", gradYear: "2027届", tags: ["校招", "民企", "环保"], isNew: false, date: "2026-04-12", publishDate: "2026-03-10", deadline: "2026-06-30", source: "https://hr.bjx.com.cn/jobs/767521.html", sourceName: "北极星水处理招聘网", requirements: "环保/给排水相关专业应届生，大专以上，协助工程师开展现场施工管理" },
+        { id: "env-011", type: "env", title: "环安专员（EHS）", company: "中创环保", city: "厦门", salary: "6K-9K", education: "本科", gradYear: "2027届", tags: ["校招", "上市公司", "EHS"], isNew: false, date: "2026-04-12", publishDate: "2026-03-25", deadline: "2026-06-30", source: "https://hr.bjx.com.cn/jobs/431476.html", sourceName: "北极星大气治理招聘网", requirements: "大专以上，负责环保设备运行管理、培训监督、排放达标管理" },
+        { id: "env-012", type: "env", title: "污水处理项目工程师", company: "福州共创环保", city: "福州", salary: "5K-8K", education: "本科", gradYear: "2027届", tags: ["校招", "民企", "水处理"], isNew: false, date: "2026-04-12", publishDate: "2026-03-05", deadline: "2026-06-30", source: "https://hr.bjx.com.cn/jobs/634436.html", sourceName: "北极星水处理招聘网", requirements: "环境工程/给排水专业，负责污水处理工艺调试+培训，五险一金+包吃住" },
+        { id: "env-013", type: "env", title: "直属事业单位工作人员", company: "福建省生态环境厅", city: "福州", salary: "面议", education: "硕士", gradYear: "2027届", tags: ["事业单位", "编制", "环保"], isNew: false, date: "2026-04-12", publishDate: "2026-03-19", deadline: "2026-04-30", source: "https://sthjt.fujian.gov.cn/zwgk/rsxx/", sourceName: "福建省生态环境厅", requirements: "环境工程/环境科学硕士，3名，福建省属事业单位编制" },
+        { id: "env-014", type: "env", title: "校招-环保方向", company: "福建龙净环保股份有限公司", city: "福州", salary: "8K-15K", education: "硕士", gradYear: "2027届", tags: ["校招", "上市公司", "大气治理"], isNew: false, date: "2026-04-12", publishDate: "2026-04-01", deadline: "2026-06-30", source: "https://longking.zhiye.com/campus?d=-1", sourceName: "龙净环保校招官网", requirements: "环境工程/大气污染控制硕士，大气治理龙头企业，熟练CAD" },
+        { id: "env-015", type: "env", title: "校园招聘-环保设计", company: "福建省环境保护设计院", city: "福州", salary: "7K-12K", education: "硕士", gradYear: "2027届", tags: ["校招", "国企", "环评", "设计"], isNew: false, date: "2026-04-12", publishDate: "2026-03-10", deadline: "2026-06-30", source: "https://www.zhipin.com/companys/6119d992cfb683841Xd63Nq6E1I~.html", sourceName: "BOSS直聘", requirements: "环境工程硕士，环评甲级+设计甲级资质，环评/工程设计方向" },
+        // ===== 应届生求职网/ESG/EHS补充岗位 =====
+        { id: "env-016", type: "env", title: "技术培训生（碳排放管理/LCA方向）", company: "上海易碳数字科技有限公司", city: "福州", salary: "8K-14K", education: "本科", gradYear: "2026届", tags: ["校招", "ESG", "碳排放", "双碳"], isNew: false, date: "2026-04-12", publishDate: "2026-03-23", deadline: "2026-05-23", source: "https://upcv.tech/xiaozhao/cmn4f00ro0008m9tnri9qzziy.html", sourceName: "UP简历", requirements: "环境科学/能源/化工/材料等，本科及以上，参与LCA模型开发和碳排放核算" },
+        { id: "env-017", type: "env", title: "LCA数据处理实习生", company: "上海易碳数字科技有限公司", city: "福州", salary: "4K-7K", education: "本科", gradYear: "2027届", tags: ["实习", "ESG", "LCA", "双碳"], isNew: false, date: "2026-04-12", publishDate: "2026-03-23", deadline: "2026-05-23", source: "https://upcv.tech/xiaozhao/cmn4f00ro0008m9tnri9qzziy.html", sourceName: "UP简历", requirements: "环境科学/能源/化工/材料/统计/计算机等，在读本科/硕士，协助LCA数据处理" },
+        { id: "env-018", type: "env", title: "新能源工程设计岗", company: "中国电建集团福建省电力勘测设计院", city: "福州", salary: "8K-14K", education: "本科", gradYear: "2027届", tags: ["校招", "央企", "新能源", "电力"], isNew: false, date: "2026-04-12", publishDate: "2025-11-25", deadline: "2026-07-31", source: "https://fedi.zhiye.com/campus", sourceName: "中国电建福建院校招官网", requirements: "新能源/电力/环境工程等，本科及以上，中国电建旗下央企设计院" },
+        { id: "env-019", type: "env", title: "环保/水保设计岗", company: "福建省水利水电勘测设计研究院", city: "福州", salary: "7K-12K", education: "硕士", gradYear: "2027届", tags: ["校招", "国企", "环保", "水利"], isNew: false, date: "2026-04-12", publishDate: "2025-10-21", deadline: "2026-06-30", source: "https://www.quanzhi.com/notice/68f66501f6390652b9a0683f", sourceName: "全职招聘网", requirements: "环境工程/水利水电硕士，福建省规模最大综合性勘测设计单位" },
+        { id: "env-020", type: "env", title: "EHS工程师（校招）", company: "宁德时代新能源科技", city: "宁德", salary: "10K-16K", education: "本科", gradYear: "2027届", tags: ["校招", "上市公司", "EHS", "新能源"], isNew: false, date: "2026-04-12", publishDate: "2026-03-15", deadline: "2026-06-30", source: "https://www.ehs.cn/gongqiu/job/", sourceName: "EHS.cn", requirements: "环境工程/安全工程本科及以上，了解ISO14001/ISO45001体系" },
+        { id: "env-021", type: "env", title: "碳资产管理专员", company: "厦门金圆集团", city: "厦门", salary: "9K-14K", education: "本科", gradYear: "2027届", tags: ["校招", "国企", "ESG", "双碳"], isNew: false, date: "2026-04-12", publishDate: "2026-03-20", deadline: "2026-06-30", source: "https://s.yingjiesheng.com/h_ESG", sourceName: "应届生求职网", requirements: "环境工程/能源经济本科，碳交易/碳资产管理方向" },
+        { id: "env-022", type: "env", title: "ESG咨询顾问（校招）", company: "毕马威中国（厦门分所）", city: "厦门", salary: "9K-15K", education: "本科", gradYear: "2027届", tags: ["校招", "四大", "ESG", "咨询"], isNew: false, date: "2026-04-12", publishDate: "2026-03-01", deadline: "2026-05-31", source: "https://s.yingjiesheng.com/h_ESG", sourceName: "应届生求职网", requirements: "环境科学/可持续发展/金融等本科，英语CET-6以上，ESG咨询与报告编制" },
+        { id: "env-023", type: "env", title: "环境监测技术员", company: "福建省环境监测中心", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["事业单位", "监测", "环保"], isNew: false, date: "2026-04-12", publishDate: "2026-04-01", deadline: "2026-04-30", source: "http://hrr.mee.gov.cn/", sourceName: "环保部人才招聘系统", requirements: "环境工程/分析化学本科，生态环境部直属事业单位" },
+        { id: "env-024", type: "env", title: "EHS管培生", company: "福建联合石油化工（FREP）", city: "泉州", salary: "8K-13K", education: "本科", gradYear: "2027届", tags: ["校招", "合资", "EHS", "石化"], isNew: false, date: "2026-04-12", publishDate: "2026-03-10", deadline: "2026-05-31", source: "https://www.ehs.cn/gongqiu/job/", sourceName: "EHS.cn", requirements: "环境工程/安全工程本科，中美合资石化企业，EHS管理体系方向" },
+        { id: "env-025", type: "env", title: "碳排放核查员", company: "福建省低碳发展促进中心", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["校招", "事业单位", "碳排放"], isNew: false, date: "2026-04-12", publishDate: "2026-03-25", deadline: "2026-05-31", source: "https://www.yingjiesheng.com/fujianjob/", sourceName: "应届生求职网", requirements: "环境工程/能源本科，碳排放核查与碳足迹计算" },
+        { id: "env-026", type: "env", title: "环评技术员", company: "福建省环境保护设计院", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["校招", "国企", "环评"], isNew: false, date: "2026-04-12", publishDate: "2026-04-01", deadline: "2026-06-30", source: "https://www.yingjiesheng.com/major/huanjing/", sourceName: "应届生求职网", requirements: "环境工程本科，协助环评报告编制，甲级资质设计院" },
+        // ===== 应届生求职网/财务类补充岗位 =====
+        { id: "fin-013", type: "finance", title: "审计实习助理", company: "中审亚太会计师事务所福建分所", city: "厦门", salary: "4K-6K", education: "本科", gradYear: "2026届", tags: ["校招", "审计", "事务所"], isNew: false, date: "2026-04-12", publishDate: "2025-12-30", deadline: "2026-05-31", source: "https://www.quanzhi.com/notice/6945be5936ef97add9979b59", sourceName: "全职招聘网", requirements: "会计学/审计学/财务管理本科，协助审计项目基础工作" },
+        { id: "fin-014", type: "finance", title: "审计员（2026校招）", company: "中审众环会计师事务所福建分所", city: "福州", salary: "5K-8K", education: "本科", gradYear: "2026届", tags: ["校招", "审计", "事务所"], isNew: false, date: "2026-04-12", publishDate: "2025-12-26", deadline: "2026-05-31", source: "https://www.quanzhi.com/notice/694dadfc36ef97add9a29dd0", sourceName: "全职招聘网", requirements: "会计/审计/财务管理本科，MAZARS国际集团中国成员所" },
+        { id: "fin-015", type: "finance", title: "春季校园招聘-财务岗", company: "广发银行福州分行", city: "福州", salary: "7K-12K", education: "本科", gradYear: "2026届", tags: ["春招", "银行", "股份制"], isNew: false, date: "2026-04-12", publishDate: "2026-04-08", deadline: "2026-04-20", source: "https://career.nankai.edu.cn/correcruit/content/id/114985.html", sourceName: "应届生求职网", requirements: "金融/财会/经济本科，国有控股股份制银行" },
+        { id: "fin-016", type: "finance", title: "春季校园招聘-财务/理财岗", company: "平安银行福州分行", city: "福州", salary: "7K-13K", education: "本科", gradYear: "2026届", tags: ["春招", "银行", "股份制"], isNew: false, date: "2026-04-12", publishDate: "2026-03-16", deadline: "2026-04-30", source: "https://www.fjsmu.edu.cn/jyw/2026/0316/c3348a178689/page.htm", sourceName: "福建师范大学就业网", requirements: "金融/经济/财务管理本科，覆盖福州/漳州/莆田/平潭" },
+        { id: "fin-017", type: "finance", title: "春季校招-综合柜员", company: "兴业银行南平分行", city: "南平", salary: "6K-10K", education: "本科", gradYear: "2026届", tags: ["春招", "银行", "股份制"], isNew: false, date: "2026-04-12", publishDate: "2026-04-02", deadline: "2026-05-15", source: "http://www.yinhangzhaopin.com/tag/fujian_216_1.html", sourceName: "银行招聘网", requirements: "金融/财会/经济本科，兴业银行总部福州，省内网点" },
+        { id: "fin-018", type: "finance", title: "财务/会计（2026校招）", company: "连江恒欣村镇银行", city: "福州", salary: "5K-8K", education: "本科", gradYear: "2026届", tags: ["校招", "银行"], isNew: false, date: "2026-04-12", publishDate: "2026-04-03", deadline: "2026-05-31", source: "http://www.yinhangzhaopin.com/tag/fuzhou_96_1.html", sourceName: "银行招聘网", requirements: "金融/财会/经济本科，福州连江村镇银行" },
+        // ===== LCA/双碳/ESG重点补充岗位 =====
+        { id: "env-027", type: "env", title: "LCA碳足迹工程师（校招）", company: "空天碳科技（福建）有限公司", city: "福州", salary: "7K-12K", education: "本科", gradYear: "2027届", tags: ["校招", "LCA", "碳足迹", "双碳"], isNew: false, date: "2026-04-12", publishDate: "2026-04-05", deadline: "2026-06-30", source: "https://www.zhipin.com/gongsi/1274ef6acd4c137d1XZ-29m9FFY~.html", sourceName: "BOSS直聘", requirements: "环境工程/化学工程本科，碳盘查/碳足迹报告编制，熟悉ISO14064/14067" },
+        { id: "env-028", type: "env", title: "碳排放管理专员（校招）", company: "福建碳排放权交易中心", city: "福州", salary: "7K-11K", education: "本科", gradYear: "2027届", tags: ["校招", "碳交易", "碳排放", "双碳"], isNew: false, date: "2026-04-12", publishDate: "2026-03-15", deadline: "2026-06-15", source: "http://fujian.tanjiaoyi.com/", sourceName: "福建碳排放交易网", requirements: "环境科学/能源经济本科，碳交易/碳配额管理，福建省碳交易平台" },
+        { id: "env-029", type: "env", title: "双碳研究助理", company: "中创碳投（厦门分公司）", city: "厦门", salary: "8K-13K", education: "本科", gradYear: "2027届", tags: ["校招", "双碳", "碳咨询", "ESG"], isNew: false, date: "2026-04-12", publishDate: "2026-03-20", deadline: "2026-06-30", source: "https://www.sinocarbon.cn/10", sourceName: "中创碳投官网", requirements: "环境/能源/经济本科，碳中和解决方案/碳足迹评价/ESG评级" },
+        { id: "env-030", type: "env", title: "可持续发展顾问（校招）", company: "商道纵横（厦门）", city: "厦门", salary: "8K-14K", education: "本科", gradYear: "2027届", tags: ["校招", "ESG", "可持续发展", "CSR"], isNew: false, date: "2026-04-12", publishDate: "2026-03-10", deadline: "2026-05-31", source: "https://www.syntao.com/jrwm", sourceName: "商道纵横官网", requirements: "环境/社会学/经济本科，ESG咨询/CSR/可持续发展报告" },
+        { id: "env-031", type: "env", title: "碳中和咨询顾问（校招）", company: "鼎力可持续数字科技（厦门）", city: "厦门", salary: "8K-13K", education: "本科", gradYear: "2027届", tags: ["校招", "碳中和", "ESG", "双碳"], isNew: false, date: "2026-04-12", publishDate: "2026-03-25", deadline: "2026-06-15", source: "https://governance-solutions.com/jiaruwomen.html", sourceName: "鼎力公司官网", requirements: "环境/金融/经济本科，碳核查/科学碳目标/CDP/TCFD" },
+        { id: "env-032", type: "env", title: "碳管理培训生", company: "宁德时代新能源科技", city: "宁德", salary: "10K-16K", education: "本科", gradYear: "2027届", tags: ["校招", "上市公司", "碳管理", "双碳"], isNew: false, date: "2026-04-12", publishDate: "2026-03-01", deadline: "2026-06-30", source: "http://fjrclh.fzu.edu.cn/cmss/zpxx/59053", sourceName: "福建人才联合网", requirements: "环境/能源本科，零碳战略/碳管理/价值链碳中和" },
+        { id: "env-033", type: "env", title: "环保工程师（双碳方向）", company: "福建龙净环保股份有限公司", city: "福州", salary: "8K-14K", education: "本科", gradYear: "2027届", tags: ["校招", "上市公司", "双碳", "环保"], isNew: false, date: "2026-04-12", publishDate: "2026-03-10", deadline: "2026-06-30", source: "https://longking.zhiye.com/Campus", sourceName: "龙净环保校招官网", requirements: "环境工程本科，世界500强紫金矿业旗下，双碳/脱硫脱硝/碳捕集" },
+        { id: "env-034", type: "env", title: "LCA分析师（校招）", company: "远景智能（Envision）", city: "厦门/上海/北京", salary: "10K-16K", education: "本科", gradYear: "2027届", tags: ["校招", "LCA", "碳足迹", "双碳"], isNew: false, date: "2026-04-12", publishDate: "2026-03-15", deadline: "2026-06-30", source: "https://careers.envision-digital.com/", sourceName: "远景智能官方校招网", requirements: "环境/能源本科，掌握LCA方法论，熟悉Gabi/Simapro/OpenLCA软件。全球绿色科技领军企业，零碳产业园" },
+        { id: "env-035", type: "env", title: "碳盘查与ESG报告专员（实习）", company: "HQTS集团（厦门）", city: "厦门", salary: "4K-7K", education: "本科", gradYear: "2027届", tags: ["实习", "ESG", "碳盘查", "双碳"], isNew: false, date: "2026-04-12", publishDate: "2026-04-03", deadline: "2026-06-30", source: "https://www.zhipin.com/job_detail/97959c72a9a3aa3d1Hx83NW6GVpU.html", sourceName: "BOSS直聘", requirements: "环境/可持续发展本科，ESG报告/碳盘查/碳核查/碳中和行动报告编制" },
+    ],
+
+    "2026-03-25": [
+        { id: "fin-m01", type: "finance", title: "综合柜员/客户经理", company: "福建海峡银行", city: "福州", salary: "7K-12K", education: "本科", gradYear: "2026届", tags: ["校招", "银行", "热门"], isNew: false, date: "2026-03-25", publishDate: "2026-03-05", deadline: "2026-04-15", source: "https://www.quanzhi.com/notice/699ca42dfc45f410491dd6e4", sourceName: "全职招聘网", requirements: "金融/经济/财务管理等专业，本科，英语四级" },
+        { id: "fin-m02", type: "finance", title: "理财经理/金融科技岗", company: "福建海峡银行", city: "福州", salary: "8K-14K", education: "本科", gradYear: "2026届", tags: ["校招", "银行", "热门"], isNew: false, date: "2026-03-25", publishDate: "2026-03-05", deadline: "2026-04-15", source: "https://www.fjhxbank.com/front/index/5912/recruitPage.htm?ctype=1", sourceName: "福建海峡银行官网", requirements: "金融/计算机/数学等，本科，90家分支机构可调配" },
+        { id: "fin-m04", type: "finance", title: "财务会计岗", company: "福建省汽车工业集团", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2026届", tags: ["校招", "国企"], isNew: false, date: "2026-03-25", publishDate: "2025-11-26", deadline: "2026-04-30", source: "https://www.quanzhi.com/notice/6926aef4f9110e735a5cf757", sourceName: "全职招聘网", requirements: "财务管理/会计学，本科，工作地福州/厦门/苏州" },
+        { id: "env-m01", type: "env", title: "土建工程师（环保方向）", company: "福建银翼建设有限公司", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["校招", "民企"], isNew: false, date: "2026-03-25", publishDate: "2026-03-26", deadline: "2026-05-31", source: "https://upcv.tech/xiaozhao/cmn8phahm001em9putw2hpfwn.html", sourceName: "UP简历", requirements: "土木工程/环境工程，本科，负责环保工程施工管理" },
+        { id: "env-m02", type: "env", title: "环保类校招", company: "福建龙净环保", city: "龙岩/福州", salary: "8K-15K", education: "硕士", gradYear: "2027届", tags: ["校招", "上市公司"], isNew: false, date: "2026-03-25", publishDate: "2025-10-08", deadline: "2026-04-30", source: "https://che.fzu.edu.cn/info/1059/9051.htm", sourceName: "福大就业网", requirements: "环境工程/化学工程等工科，硕士优先" },
+        { id: "fin-m05", type: "finance", title: "财务专员", company: "福建省三钢集团", city: "三明", salary: "6K-9K", education: "本科", gradYear: "2026届", tags: ["校招", "国企"], isNew: false, date: "2026-03-25", publishDate: "2025-09-29", deadline: "2026-05-31", source: "https://www.quanzhi.com/notice/68da1f1a7f2732863fe3cda2", sourceName: "全职招聘网", requirements: "财务管理/会计学，本科，省属钢铁国企" }
+    ],
+    "2026-03-15": [
+        { id: "fin-m06", type: "finance", title: "综合柜员/运营岗", company: "中国农业银行福建省分行", city: "福建全省", salary: "6K-10K", education: "本科", gradYear: "2026届", tags: ["校招", "银行", "四大行"], isNew: false, date: "2026-03-15", publishDate: "2025-09-10", deadline: "2026-03-31", source: "https://zccareer.zufe.edu.cn/campus/view/id/869167", sourceName: "浙财就业网", requirements: "不限专业优先，本科，农行福建省分行全省网点" },
+        { id: "fin-m07", type: "finance", title: "综合柜员/客服经理", company: "中国建设银行福建省分行", city: "福建全省", salary: "7K-11K", education: "本科", gradYear: "2026届", tags: ["校招", "银行", "四大行"], isNew: false, date: "2026-03-15", publishDate: "2025-09-17", deadline: "2026-03-31", source: "https://jyb.zstu.edu.cn/campus/view/id/339464", sourceName: "浙理工就业网", requirements: "不限专业优先，本科，建行福建分行450个网点" },
+        { id: "fin-m08", type: "finance", title: "综合柜员/客户经理", company: "交通银行福建省分行", city: "福州/厦门", salary: "7K-12K", education: "本科", gradYear: "2026届", tags: ["校招", "银行", "六大行"], isNew: false, date: "2026-03-15", publishDate: "2025-09-25", deadline: "2026-03-28", source: "https://xsjyzd.jmu.edu.cn/campus/view/id/996348", sourceName: "集美大学就业网", requirements: "经济/金融/管理等，本科，百年民族金融品牌" },
+        { id: "fin-m09", type: "finance", title: "综合柜员岗", company: "中国邮政储蓄银行福建省分行", city: "福建全省", salary: "6K-10K", education: "本科", gradYear: "2026届", tags: ["校招", "银行", "六大行"], isNew: false, date: "2026-03-15", publishDate: "2025-09-19", deadline: "2026-03-31", source: "https://www.fjsmu.edu.cn/jyw/2025/0919/c3473a172044/page.htm", sourceName: "福建医科大学就业网", requirements: "金融/财会/计算机等，本科，978个网点覆盖福建" },
+        { id: "env-m03", type: "env", title: "环境咨询工程师", company: "福建省环境保护设计院", city: "福州", salary: "7K-12K", education: "硕士", gradYear: "2027届", tags: ["校招", "国企", "环评"], isNew: false, date: "2026-03-15", publishDate: "2026-03-10", deadline: "2026-05-31", source: "https://www.zhaopin.com/companydetail/CZ622575230.htm", sourceName: "智联招聘", requirements: "环境工程硕士，环评甲级+设计甲级资质" }
+    ],
+    "2026-03-05": [
+        { id: "fin-m10", type: "finance", title: "财务会计/审计助理", company: "兴业银行福州分行", city: "福州", salary: "8K-14K", education: "本科", gradYear: "2026届", tags: ["社招/校招", "银行"], isNew: false, date: "2026-03-05", publishDate: "2026-03-10", deadline: "长期有效", source: "http://www.yinhangzhaopin.com/tag/fujian_216_1.html", sourceName: "银行招聘网", requirements: "财务管理/会计/审计，兴业银行总部在福州" },
+        { id: "env-m04", type: "env", title: "水处理工程师", company: "福建海峡环保集团", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["校招", "上市公司"], isNew: false, date: "2026-03-05", publishDate: "2026-03-01", deadline: "2026-05-31", source: "https://hr.bjx.com.cn/companys/63449.html", sourceName: "北极星招聘网", requirements: "环境工程/给排水，福州市水务集团上市(603817)" },
+        { id: "env-m05", type: "env", title: "环保技术研发", company: "福建百水环境科技", city: "泉州", salary: "6K-11K", education: "本科", gradYear: "2027届", tags: ["校招", "民企", "研发"], isNew: false, date: "2026-03-05", publishDate: "2026-02-20", deadline: "2026-05-31", source: "https://hr.bjx.com.cn/companys/81669.html", sourceName: "北极星招聘网", requirements: "环境工程/化学相关，从事环保技术研发" }
+    ],
+    // ===== 2026年2月 =====
+    "2026-02-22": [
+        { id: "fin-f01", type: "finance", title: "财务会计岗（春招补录）", company: "中国工商银行福建省分行", city: "福建全省", salary: "7K-11K", education: "本科", gradYear: "2026届", tags: ["春招", "银行", "四大行"], isNew: false, date: "2026-02-22", publishDate: "2026-02-10", deadline: "2026-03-15", source: "http://www.yinhangzhaopin.com/special/2026fjyhxz/", sourceName: "银行招聘网", requirements: "不限专业优先，本科，工行福建省分行春招补录" },
+        { id: "fin-f02", type: "finance", title: "综合柜员（春招）", company: "中国银行福建省分行", city: "福州/厦门/泉州", salary: "6K-10K", education: "本科", gradYear: "2026届", tags: ["春招", "银行", "四大行"], isNew: false, date: "2026-02-22", publishDate: "2026-02-08", deadline: "2026-03-10", source: "http://www.yinhangzhaopin.com/special/2026fjyhxz/", sourceName: "银行招聘网", requirements: "金融/财会/经济类，本科，中行福建省分行春招" },
+        { id: "fin-f03", type: "finance", title: "财务管理培训生", company: "厦门银行", city: "厦门", salary: "7K-12K", education: "本科", gradYear: "2026届", tags: ["春招", "银行"], isNew: false, date: "2026-02-22", publishDate: "2026-02-05", deadline: "2026-03-20", source: "https://www.jobui.com/rank/company/view/fujian/yinhang/", sourceName: "职友集", requirements: "财务管理/会计学，城商行管培生计划" },
+        { id: "env-f01", type: "env", title: "生态保护技术咨询", company: "福建省招标采购集团", city: "福州", salary: "7K-12K", education: "硕士", gradYear: "2027届", tags: ["校招", "国企"], isNew: false, date: "2026-02-22", publishDate: "2025-12-02", deadline: "2026-05-31", source: "https://jyb.gzist.edu.cn/info/2022/4186.htm", sourceName: "广理工就业网", requirements: "环境工程/生态学硕士，省管国企" },
+        { id: "env-f02", type: "env", title: "环评师实习生", company: "福建省环境保护设计院", city: "福州", salary: "5K-8K", education: "硕士", gradYear: "2027届", tags: ["实习", "国企", "环评"], isNew: false, date: "2026-02-22", publishDate: "2026-02-01", deadline: "2026-06-30", source: "https://hr.bjx.com.cn/hotword/3768117/", sourceName: "北极星招聘网", requirements: "环境工程硕士在读，协助环评报告编制" }
+    ],
+    "2026-02-10": [
+        { id: "fin-f05", type: "finance", title: "会计/出纳（春招）", company: "福建省汽车工业集团", city: "厦门", salary: "5K-8K", education: "本科", gradYear: "2026届", tags: ["春招", "国企"], isNew: false, date: "2026-02-10", publishDate: "2026-01-28", deadline: "2026-03-31", source: "https://www.quanzhi.com/notice/6926aef4f9110e735a5cf757", sourceName: "全职招聘网", requirements: "财务管理/会计学，本科，省属国企" },
+        { id: "fin-f06", type: "finance", title: "财务助理", company: "厦门国际银行", city: "厦门", salary: "7K-11K", education: "本科", gradYear: "2026届", tags: ["春招", "银行"], isNew: false, date: "2026-02-10", publishDate: "2026-01-25", deadline: "2026-03-15", source: "https://www.jobui.com/rank/company/view/fujian/yinhang/", sourceName: "职友集", requirements: "会计/金融/经济，中外合资银行" },
+        { id: "env-f03", type: "env", title: "水处理工艺设计", company: "福建源智汇环境科技", city: "福州", salary: "6K-9K", education: "本科", gradYear: "2027届", tags: ["校招", "民企"], isNew: false, date: "2026-02-10", publishDate: "2026-01-17", deadline: "2026-05-31", source: "https://www.zhipin.com/job_detail/a450b7deda064963031_3dS-EFJS.html", sourceName: "BOSS直聘", requirements: "环境工程/给排水，负责水处理工艺方案设计" }
+    ],
+    // ===== 2026年1月 =====
+    "2026-01-22": [
+        { id: "fin-j01", type: "finance", title: "财务/会计岗（秋招补录）", company: "中国建设银行福建省分行", city: "福建全省", salary: "7K-11K", education: "本科", gradYear: "2026届", tags: ["秋招补录", "银行", "四大行"], isNew: false, date: "2026-01-22", publishDate: "2025-09-17", deadline: "2026-02-28", source: "https://jyw.zjgsu.edu.cn/career/zpxx/view/zpxx/108508533493993472", sourceName: "浙商大就业网", requirements: "不限专业优先，本科，建行福建分行秋招补录" },
+        { id: "fin-j02", type: "finance", title: "综合柜员（秋招补录）", company: "中国农业银行福建省分行", city: "福建全省", salary: "6K-10K", education: "本科", gradYear: "2026届", tags: ["秋招补录", "银行", "四大行"], isNew: false, date: "2026-01-22", publishDate: "2025-09-10", deadline: "2026-02-28", source: "https://zccareer.zufe.edu.cn/campus/view/id/869167", sourceName: "浙财就业网", requirements: "不限专业可报，本科，农行福建省分行" },
+        { id: "fin-j03", type: "finance", title: "财务会计岗", company: "福建省招标采购集团", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2026届", tags: ["秋招", "国企"], isNew: false, date: "2026-01-22", publishDate: "2025-12-02", deadline: "2026-03-31", source: "https://www.offerxiansheng.com/info-detail?id=72119", sourceName: "offer先生", requirements: "财务/会计/审计，本科，省管国企" },
+        { id: "fin-j04", type: "finance", title: "财务管培生", company: "紫金矿业集团", city: "福州", salary: "7K-11K", education: "本科", gradYear: "2026届", tags: ["秋招", "上市公司"], isNew: false, date: "2026-01-22", publishDate: "2025-09-29", deadline: "2026-02-28", source: "https://www.quanzhi.com/notice/68da1f1a7f2732863fe3cda2", sourceName: "全职招聘网", requirements: "财务管理/会计学，大型矿业上市公司" },
+        { id: "env-j01", type: "env", title: "环境工程师", company: "中建生态环境集团", city: "福州/厦门", salary: "9K-14K", education: "硕士", gradYear: "2027届", tags: ["校招", "央企"], isNew: false, date: "2026-01-22", publishDate: "2026-01-29", deadline: "2026-04-29", source: "https://career.sysu.edu.cn/campus/view/id/995105", sourceName: "中山大学就业网", requirements: "环境工程/环境科学硕士，中建集团下属央企" },
+        { id: "env-j02", type: "env", title: "脱硫脱硝工程师", company: "福建龙净脱硫脱硝公司", city: "龙岩", salary: "8K-14K", education: "硕士", gradYear: "2027届", tags: ["校招", "上市公司"], isNew: false, date: "2026-01-22", publishDate: "2025-05-22", deadline: "2026-03-31", source: "https://www.jrzp.com/xiaozhaoView/5111227.shtml", sourceName: "今日招聘网", requirements: "环境工程/化学工程等工科硕士" },
+        { id: "fin-j05", type: "finance", title: "财务会计（秋招）", company: "福耀玻璃工业集团", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2026届", tags: ["秋招", "制造业"], isNew: false, date: "2026-01-22", publishDate: "2025-10-15", deadline: "2026-02-28", source: "https://www.ncss.cn/student/jobs/7yGJRKuShdpFM9DuK9qbp2/detail.html", sourceName: "国家就业平台", requirements: "财务管理/会计学，全球最大汽车玻璃制造商" }
+    ],
+    "2026-01-08": [
+        { id: "fin-j06", type: "finance", title: "综合柜员/客户经理", company: "招商银行福州分行", city: "福州", salary: "8K-14K", education: "本科", gradYear: "2026届", tags: ["秋招", "股份制银行"], isNew: false, date: "2026-01-08", publishDate: "2025-09-20", deadline: "2026-02-15", source: "http://www.yinhangzhaopin.com/special/2026fjyhxz/", sourceName: "银行招聘网", requirements: "金融/财会/管理等，本科，招行福州分行" },
+        { id: "fin-j07", type: "finance", title: "综合柜员/理财经理", company: "中信银行福州分行", city: "福州", salary: "7K-13K", education: "本科", gradYear: "2026届", tags: ["秋招", "股份制银行"], isNew: false, date: "2026-01-08", publishDate: "2025-09-15", deadline: "2026-02-15", source: "http://www.yinhangzhaopin.com/special/2026fjyhxz/", sourceName: "银行招聘网", requirements: "经济/金融/财会，本科，中信银行福州分行" },
+        { id: "fin-j08", type: "finance", title: "财务专员", company: "安踏体育", city: "厦门", salary: "7K-10K", education: "本科", gradYear: "2026届", tags: ["秋招", "上市公司"], isNew: false, date: "2026-01-08", publishDate: "2025-10-10", deadline: "2026-02-20", source: "https://caiwukuaiji.51job.com/fujiansheng/caiwu/", sourceName: "前程无忧", requirements: "财务管理/会计学，知名运动品牌上市公司" },
+        { id: "fin-j09", type: "finance", title: "税务专员", company: "毕马威华振（厦门分所）", city: "厦门", salary: "8K-13K", education: "本科", gradYear: "2026届", tags: ["秋招", "四大"], isNew: false, date: "2026-01-08", publishDate: "2025-09-25", deadline: "2026-02-28", source: "https://home.kpmg/cn/campus", sourceName: "毕马威官网", requirements: "会计/审计/税务/财务管理，英语CET-6以上" },
+        { id: "env-j03", type: "env", title: "环保技术岗", company: "福建省金皇环保科技", city: "福州", salary: "8K-14K", education: "硕士", gradYear: "2027届", tags: ["秋招", "国企", "环评"], isNew: false, date: "2026-01-08", publishDate: "2025-11-20", deadline: "2026-03-31", source: "https://pjcareer.dlut.edu.cn/info/1051/32041.htm", sourceName: "大连理工就业网", requirements: "环境生态类/大气科学类/化工类硕士" },
+        { id: "env-j04", type: "env", title: "环保工程设计", company: "福建省水利水电工程局", city: "福州", salary: "7K-12K", education: "本科", gradYear: "2027届", tags: ["校招", "国企"], isNew: false, date: "2026-01-08", publishDate: "2025-11-10", deadline: "2026-03-31", source: "https://hr.bjx.com.cn/companys/28916/jobs_1_1/", sourceName: "北极星招聘网", requirements: "环境工程/给排水，省属国有施工企业" }
+    ],
+    // ===== 2026年1月1日（元旦首发） =====
+    "2026-01-01": [
+        { id: "fin-y01", type: "finance", title: "财务管理培训生", company: "建发集团", city: "厦门", salary: "8K-12K", education: "本科", gradYear: "2026届", tags: ["秋招", "国企", "管培"], isNew: false, date: "2026-01-01", publishDate: "2025-09-15", deadline: "2026-01-31", source: "https://www.cdc.com.cn/campus", sourceName: "建发集团官网", requirements: "财务管理/会计学，本科，福建省属国企龙头" },
+        { id: "fin-y02", type: "finance", title: "财务分析师", company: "厦门国贸控股", city: "厦门", salary: "8K-12K", education: "本科", gradYear: "2026届", tags: ["秋招", "国企"], isNew: false, date: "2026-01-01", publishDate: "2025-09-20", deadline: "2026-02-15", source: "https://www.itg.com.cn/campus", sourceName: "厦门国贸官网", requirements: "财务管理/金融学，数据敏感度高" },
+        { id: "fin-y03", type: "finance", title: "成本核算专员", company: "宁德时代", city: "宁德", salary: "7K-12K", education: "本科", gradYear: "2026届", tags: ["秋招", "新能源"], isNew: false, date: "2026-01-01", publishDate: "2025-09-25", deadline: "2026-02-28", source: "https://www.catl.com/campus", sourceName: "宁德时代官网", requirements: "财务管理/会计学，熟悉成本核算流程" },
+        { id: "env-y01", type: "env", title: "EHS工程师", company: "宁德时代", city: "宁德", salary: "10K-16K", education: "硕士", gradYear: "2027届", tags: ["秋招", "新能源", "EHS"], isNew: false, date: "2026-01-01", publishDate: "2025-09-25", deadline: "2026-02-28", source: "https://www.catl.com/campus", sourceName: "宁德时代官网", requirements: "环境工程/安全工程硕士，了解ISO14001体系" },
+        { id: "env-y02", type: "env", title: "碳排放管理师", company: "厦门金圆集团", city: "厦门", salary: "9K-14K", education: "硕士", gradYear: "2027届", tags: ["秋招", "双碳"], isNew: false, date: "2026-01-01", publishDate: "2025-10-01", deadline: "2026-03-15", source: "https://www.xmjy.com/campus", sourceName: "金圆集团官网", requirements: "环境工程/能源相关，碳交易体系经验" },
+        { id: "env-y03", type: "env", title: "固废处理研发工程师", company: "紫金矿业集团", city: "福州", salary: "10K-16K", education: "硕士", gradYear: "2027届", tags: ["秋招", "上市公司", "研发"], isNew: false, date: "2026-01-01", publishDate: "2025-09-29", deadline: "2026-03-15", source: "https://www.zjky.cn/campus", sourceName: "紫金矿业官网", requirements: "环境工程硕士，固废处理方向" }
+    ],
+
+    "2026-04-13": [
+        // ===== 财务管理类 (2026届本科) - 银行春招 =====
+        { id: "fin-019", type: "finance", title: "管培生（财务管理方向）", company: "中国邮政集团福建省分公司", city: "福建全省", salary: "7K-12K", education: "本科", gradYear: "2026届", tags: ["春招", "央企", "管培", "即将截止"], isNew: false, date: "2026-04-13", publishDate: "2026-04-09", deadline: "2026-04-27", source: "https://jy.ptu.edu.cn/campus/view/id/1074317", sourceName: "莆田学院就业网", requirements: "财务管理/会计学/金融学等本科，中国邮政福建分公司春招，全省各地市均有岗位" },
+        { id: "fin-020", type: "finance", title: "财务管理岗（春招）", company: "中国邮政集团福建省分公司", city: "福州", salary: "7K-11K", education: "本科", gradYear: "2026届", tags: ["春招", "央企", "财务", "即将截止"], isNew: false, date: "2026-04-13", publishDate: "2026-04-09", deadline: "2026-04-27", source: "http://fjrclh.fzu.edu.cn/cmss/zpxx/61802", sourceName: "福建人才联合网", requirements: "财经类相关专业本科，省分公司本部财务管理岗，央企正式编制" },
+        // ===== 财务管理类 (2026届本科) - 国企/民企 =====
+        { id: "fin-021", type: "finance", title: "财务管培生", company: "永荣控股集团", city: "莆田", salary: "6K-10K", education: "本科", gradYear: "2026届", tags: ["校招", "民企", "500强", "管培"], isNew: false, date: "2026-04-13", publishDate: "2026-03-20", deadline: "2026-05-31", source: "https://career.hebut.edu.cn/home/correcruit/content/id/77720.html", sourceName: "河北工大就业网", requirements: "财务管理/会计学本科，中国500强企业，绿色新材料主业" },
+        { id: "fin-022", type: "finance", title: "财务类管培生", company: "泉州发展集团", city: "泉州", salary: "8K-13K", education: "硕士", gradYear: "2026届", tags: ["校招", "国企", "不符合条件", "要求硕士"], isNew: false, date: "2026-04-13", publishDate: "2026-03-30", deadline: "2026-04-14", source: "https://hx.kaowu.cn/home/exam-notice/view.html?notice_id=1065", sourceName: "福建省招聘考试报名平台", requirements: "研究生学历应届毕业生，会计与审计类专业（岗位5，招3人）。不符合本科条件，已标记" },
+        { id: "fin-023", type: "finance", title: "财务专员", company: "福建龙净环保股份有限公司", city: "龙岩/福州", salary: "6K-9K", education: "本科", gradYear: "2026届", tags: ["校招", "上市公司", "环保"], isNew: false, date: "2026-04-13", publishDate: "2026-04-01", deadline: "2026-06-30", source: "https://che.fzu.edu.cn/info/1059/9051.htm", sourceName: "福大化工学院", requirements: "财务会计类本科，世界500强紫金矿业旗下，职能类岗位" },
+        { id: "fin-024", type: "finance", title: "金融管培生", company: "永荣控股集团", city: "福州", salary: "7K-12K", education: "本科", gradYear: "2026届", tags: ["校招", "民企", "500强", "金融"], isNew: false, date: "2026-04-13", publishDate: "2026-03-20", deadline: "2026-05-31", source: "https://www.shushuqiuzhi.com/article/166695", sourceName: "鼠鼠求职", requirements: "金融/财会类本科，中国500强，含供应链金融方向" },
+        { id: "fin-025", type: "finance", title: "财务审计岗（校招）", company: "福建省投资开发集团", city: "福州", salary: "7K-12K", education: "本科", gradYear: "2026届", tags: ["校招", "省属国企", "已截止"], isNew: false, date: "2026-04-13", publishDate: "2026-01-14", deadline: "2026-01-25", source: "https://fj.huatu.com/2026/0114/2509828.html", sourceName: "华图福建", requirements: "会计/审计/财务管理本科，省属重要骨干企业，注册资本100亿元" },
+        // ===== 环境工程类 (2027届) - 双碳/LCA/ESG重点 =====
+        { id: "env-036", type: "env", title: "碳排放监测分析师（校招）", company: "福建空天碳科技集团", city: "南平", salary: "7K-12K", education: "本科", gradYear: "2027届", tags: ["校招", "国企", "碳排放", "双碳", "卫星遥感"], isNew: false, date: "2026-04-13", publishDate: "2026-04-01", deadline: "2026-06-30", source: "https://www.zhipin.com/gongsi/1274ef6acd4c137d1XZ-29m9FFY~.html", sourceName: "BOSS直聘", requirements: "环境/遥感/计算机本科，中科院产业基金+国有资本，卫星遥感碳排放监测技术" },
+        { id: "env-037", type: "env", title: "碳足迹核算工程师（校招）", company: "福建空天碳科技集团", city: "南平/福州", salary: "8K-13K", education: "本科", gradYear: "2027届", tags: ["校招", "国企", "碳足迹", "LCA"], isNew: false, date: "2026-04-13", publishDate: "2026-04-01", deadline: "2026-06-30", source: "https://www.liepin.com/company-jobs/13382153/", sourceName: "猎聘", requirements: "环境科学/化学工程本科，碳足迹核算/LCA评价，参与国家重点研发计划" },
+        { id: "env-038", type: "env", title: "碳资产运营专员（校招）", company: "福建闽投碳资产投资有限公司", city: "福州", salary: "8K-13K", education: "本科", gradYear: "2027届", tags: ["校招", "省属国企", "碳资产", "碳交易", "已截止"], isNew: false, date: "2026-04-13", publishDate: "2026-01-20", deadline: "2026-01-25", source: "https://fz.bendibao.com/job/2026120/79626.shtm", sourceName: "福州本地宝", requirements: "环境/能源经济本科，福建投资集团下属，碳配额管理/碳交易/CCER开发" },
+        { id: "env-039", type: "env", title: "ESG分析师（校招）", company: "福建省投资开发集团", city: "福州", salary: "8K-14K", education: "本科", gradYear: "2027届", tags: ["校招", "省属国企", "ESG", "双碳", "已截止"], isNew: false, date: "2026-04-13", publishDate: "2026-01-14", deadline: "2026-01-25", source: "https://fj.huatu.com/2026/0114/2509828.html", sourceName: "华图福建", requirements: "环境/金融/可持续发展本科，省属重要骨干企业，ESG投资与绿色金融方向" },
+        // ===== 环境工程类 (2027届) - 环保/EHS/环评 =====
+        { id: "env-040", type: "env", title: "生态环保岗（校招）", company: "泉州发展集团", city: "泉州", salary: "8K-13K", education: "本科", gradYear: "2027届", tags: ["校招", "国企", "数据存疑", "岗位表未确认"], isNew: false, date: "2026-04-13", publishDate: "2026-03-30", deadline: "2026-04-14", source: "https://www.qz-jk.com/rencai/zpgg2026033001.aspx", sourceName: "泉州发展集团官网", requirements: "⚠️该岗位在官方岗位表(PDF)中未找到，泉州发展集团20个岗位均为管培生/项目工程类，无环保岗。数据存疑" },
+        { id: "env-041", type: "env", title: "环境监测技术员（事业编）", company: "福建省生态环境厅直属事业单位", city: "福州/莆田", salary: "6K-10K", education: "硕士", gradYear: "2027届", tags: ["事业单位", "编制", "监测", "即将截止"], isNew: false, date: "2026-04-13", publishDate: "2026-03-19", deadline: "2026-04-30", source: "https://sthjt.fujian.gov.cn/zwgk/rsxx/202603/t20260319_7113465.htm", sourceName: "福建省生态环境厅", requirements: "环境工程/分析化学硕士，省属事业单位编制，含莆田环境监测中心站" },
+        { id: "env-042", type: "env", title: "环境科学研究岗", company: "福建省环境科学研究院", city: "福州", salary: "7K-12K", education: "硕士", gradYear: "2027届", tags: ["科研", "事业单位", "环保"], isNew: false, date: "2026-04-13", publishDate: "2026-03-19", deadline: "2026-05-15", source: "https://sthjt.fujian.gov.cn/zwgk/rsxx/", sourceName: "福建省生态环境厅", requirements: "环境科学/生态学硕士，省环科院非编技术岗，科研方向" },
+        { id: "env-043", type: "env", title: "生态环境部直属单位校招", company: "生态环境部直属企事业单位", city: "福建全省", salary: "7K-12K", education: "本科", gradYear: "2027届", tags: ["央企", "环保", "监测", "即将截止"], isNew: false, date: "2026-04-13", publishDate: "2026-04-01", deadline: "2026-04-30", source: "https://www.mee.gov.cn/ywgz/xztzyrs/rcgl/202604/t20260401_1148112.shtml", sourceName: "生态环境部", requirements: "环境工程/环境科学本科及以上，生态环境部2026年度公开招聘" },
+        { id: "env-044", type: "env", title: "EHS工程师（2026春招）", company: "福建联合石油化工（FREP）", city: "泉州", salary: "8K-14K", education: "本科", gradYear: "2027届", tags: ["春招", "合资", "EHS", "石化"], isNew: false, date: "2026-04-13", publishDate: "2026-04-05", deadline: "2026-05-31", source: "https://www.ehs.cn/gongqiu/job/", sourceName: "EHS.cn", requirements: "环境工程/安全工程本科，中美合资大型石化企业EHS管理体系" },
+        { id: "env-045", type: "env", title: "新能源环保设计岗", company: "福建省投资开发集团", city: "福州", salary: "8K-14K", education: "本科", gradYear: "2027届", tags: ["校招", "省属国企", "新能源", "环保"], isNew: false, date: "2026-04-13", publishDate: "2026-01-14", deadline: "2026-05-31", source: "https://campus.51job.com/FJTZ2025/", sourceName: "前程无忧", requirements: "环境工程/新能源本科，省属重要骨干企业，清洁能源+环保方向" },
+        { id: "env-046", type: "env", title: "环保运营岗（校招）", company: "福建海峡环保集团", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["校招", "上市公司", "水处理"], isNew: false, date: "2026-04-13", publishDate: "2026-04-01", deadline: "2026-06-30", source: "https://hr.bjx.com.cn/hotword/312462/", sourceName: "北极星招聘网", requirements: "环境工程/给排水本科，福州市水务集团上市(603817)，污水运营方向" },
+        // ===== 环境工程类 (2027届) - LCA/双碳实习 =====
+        { id: "env-047", type: "env", title: "LCA产品生命周期评估工程师", company: "维发股份", city: "厦门", salary: "8K-14K", education: "本科", gradYear: "2027届", tags: ["校招", "LCA", "碳足迹", "制造业"], isNew: false, date: "2026-04-13", publishDate: "2026-04-08", deadline: "2026-06-30", source: "https://xsjyzd.jmu.edu.cn/campus/view/id/996365", sourceName: "集美大学就业网", requirements: "环境/材料/化工本科，产品生命周期评估与碳足迹核算" },
+        { id: "env-048", type: "env", title: "可持续发展管培生", company: "永荣控股集团", city: "莆田/福州", salary: "7K-11K", education: "本科", gradYear: "2027届", tags: ["校招", "500强", "可持续发展", "ESG"], isNew: false, date: "2026-04-13", publishDate: "2026-03-20", deadline: "2026-05-31", source: "https://www.quanzhi.com/notice/6938a364f9110e735a77c6f6", sourceName: "全职招聘网", requirements: "环境/化工/材料本科，中国500强绿色新材料集团，ESG方向" },
+        { id: "env-049", type: "env", title: "节能减排岗（温室气体审定核查）", company: "福建省南平碳计量中心", city: "南平", salary: "7K-12K", education: "硕士", gradYear: "2027届", tags: ["校招", "事业单位", "碳核查", "碳计量"], isNew: false, date: "2026-04-13", publishDate: "2026-03-15", deadline: "2026-05-31", source: "https://www.gaoxiaojob.com/job/detail/1290466.html", sourceName: "高校人才网", requirements: "环境工程/化学/能源硕士，温室气体审定核查+碳计量研究方向" },
+        { id: "env-050", type: "env", title: "新能源技术岗（光伏/储能方向）", company: "厦门笃正新能源股份有限公司", city: "厦门", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["校招", "民企", "新能源"], isNew: false, date: "2026-04-13", publishDate: "2026-04-01", deadline: "2026-06-30", source: "http://fjrclh.fzu.edu.cn/cmss/zpxx/60649", sourceName: "福建人才联合网", requirements: "新能源/环境工程本科，ECO-WORTHY品牌，光伏+储能产品技术" }
+    ],
+
+    "2026-04-14": [
+        // ===== 财务管理类 (2026届本科) - 银行春招 =====
+        { id: "fin-q01", type: "finance", title: "营销英才-春招", company: "广发银行福州分行", city: "福州", salary: "7K-13K", education: "本科", gradYear: "2026届", tags: ["春招", "银行", "股份制"], isNew: false, date: "2026-04-14", publishDate: "2026-04-09", deadline: "2026-04-20", source: "https://www.offcn.com/yinhang/2026/0409/72948.html", sourceName: "中公教育", requirements: "2026届本科及以上学历，专业不限（重点招收理学/工学/金融/经济/法律），福州/福清" },
+        { id: "fin-q02", type: "finance", title: "金融科技类-春招", company: "广发银行福州分行", city: "福州", salary: "8K-14K", education: "本科", gradYear: "2026届", tags: ["春招", "银行", "股份制", "科技"], isNew: false, date: "2026-04-14", publishDate: "2026-04-09", deadline: "2026-04-20", source: "https://career.nankai.edu.cn/correcruit/content/id/114985.html", sourceName: "应届生求职网", requirements: "2026届本科，理学/工学/计算机优先，广发银行福州分行科技类岗位" },
+        { id: "fin-q03", type: "finance", title: "管理培训生（绿色金融方向）-春招", company: "兴业银行厦门分行", city: "厦门", salary: "8K-14K", education: "本科", gradYear: "2026届", tags: ["春招", "银行", "绿色金融", "总部福州"], isNew: false, date: "2026-04-14", publishDate: "2026-03-20", deadline: "2026-04-30", source: "https://www.eoffcn.com/kszx/detail/1993019.html", sourceName: "中公网校", requirements: "2026届本科及以上，兴业银行总部福州，28家支行，管培生含绿色金融方向" },
+        { id: "fin-q04", type: "finance", title: "市场营销类/运营支持类-春招", company: "兴业银行厦门分行", city: "厦门", salary: "7K-12K", education: "本科", gradYear: "2026届", tags: ["春招", "银行", "股份制"], isNew: false, date: "2026-04-14", publishDate: "2026-03-20", deadline: "2026-04-30", source: "http://www.yinhangzhaopin.com/xyyh/2026-03-02/213782.htm", sourceName: "银行招聘网", requirements: "2026届本科及以上，不限专业，每人最多报3家机构每家1岗" },
+        // ===== 环境工程类 (2027届本科/硕士) - 双碳/LCA/ESG重点 =====
+        { id: "env-q01", type: "env", title: "绿色低碳咨询工程师（校招）", company: "中国检验认证集团福建公司", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["校招", "央企", "碳排放", "双碳", "碳核查"], isNew: false, date: "2026-04-14", publishDate: "2026-04-01", deadline: "2026-06-30", source: "https://www.zhaopin.com/zhaopin/e4656ad1ac0546899e190e63a8c110fe/", sourceName: "智联招聘", requirements: "环境/能源本科，碳排放核算与报告编制，配合第三方核查及碳资产管理，央企" },
+        { id: "env-q02", type: "env", title: "碳业务规划设计师（校招）", company: "中国电建集团福建省电力勘测设计院", city: "福州", salary: "9K-18K", education: "硕士", gradYear: "2027届", tags: ["校招", "央企", "双碳", "碳业务", "电力"], isNew: false, date: "2026-04-14", publishDate: "2026-03-25", deadline: "2026-07-31", source: "https://www.zhaopin.com/zhaopin/e4656ad1ac0546899e190e63a8c110fe/", sourceName: "智联招聘", requirements: "环境/能源经济硕士，碳减排项目方案设计/减排机理调研/数据处理，央企设计院" },
+        { id: "env-q03", type: "env", title: "绿色低碳项目经理（校招）", company: "福建远卓咨询", city: "福州", salary: "5K-10K", education: "本科", gradYear: "2027届", tags: ["校招", "碳核查", "碳足迹", "碳中和", "绿色工厂"], isNew: false, date: "2026-04-14", publishDate: "2026-03-20", deadline: "2026-06-30", source: "https://www.zhaopin.com/zhaopin/e4656ad1ac0546899e190e63a8c110fe/", sourceName: "智联招聘", requirements: "环境/能源本科，绿色工厂/绿色园区申报、碳核查、碳足迹、碳中和认证" },
+        // ===== 环境工程类 (2027届) - 石化EHS/环保 =====
+        { id: "env-q04", type: "env", title: "生产运行岗（环境工程/安全工程方向）", company: "中化泉州石化有限公司", city: "泉州", salary: "8K-13K", education: "本科", gradYear: "2027届", tags: ["春招", "央企", "石化", "EHS", "环境工程"], isNew: false, date: "2026-04-14", publishDate: "2026-03-11", deadline: "2026-05-11", source: "https://upcv.tech/xiaozhao/cmmogrs7l0024m9z0qm3yzlfz.html", sourceName: "UP简历", requirements: "环境工程/安全工程本科，CET4≥425分，中化控股央企，七险二金，泉州惠安" },
+        { id: "env-q05", type: "env", title: "技术储备岗（环境工程/安全方向）", company: "中化泉州石化有限公司", city: "泉州", salary: "10K-16K", education: "硕士", gradYear: "2027届", tags: ["春招", "央企", "石化", "EHS", "环境工程"], isNew: false, date: "2026-04-14", publishDate: "2026-03-11", deadline: "2026-05-11", source: "https://fj.huatu.com/2026/0311/2511390.html", sourceName: "华图福建", requirements: "安全工程/环境工程硕士，CET4≥425分，中化控股央企，技术储备方向" },
+        // ===== 环境工程类 (2027届) - 低碳可持续发展 =====
+        { id: "env-q06", type: "env", title: "低碳可持续发展专员（校招）", company: "厦门海辰储能科技股份有限公司", city: "厦门", salary: "12K-15K", education: "本科", gradYear: "2027届", tags: ["校招", "新能源", "储能", "低碳", "可持续发展"], isNew: false, date: "2026-04-14", publishDate: "2026-03-28", deadline: "2026-06-30", source: "https://www.zhipin.com/gongsi/d71c466bc0ac18611XZ809q5EFE~.html", sourceName: "BOSS直聘", requirements: "环境/化工/材料本科，储能行业低碳可持续发展方向，福建省双重点企业，本科12-15万/年" },
+        // ===== 环境工程类 (2027届) - 事业单位 =====
+        { id: "env-q07", type: "env", title: "省属事业单位工作人员（环保类）", company: "福建省省属事业单位", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["事业单位", "编制", "环保"], isNew: false, date: "2026-04-14", publishDate: "2026-03-19", deadline: "2026-04-25", source: "https://rst.fujian.gov.cn/zw/ztzl/zxzt/sydwrczp/zpfa/202603/t20260319_7113263.htm", sourceName: "福建省人社厅", requirements: "环境工程/环境科学本科及以上，354人公开招聘，笔试4月25日，省属事业编制" },
+        // ===== 下午补充 - 财务管理类 =====
+        { id: "fin-q05", type: "finance", title: "综合财务岗-2026届校招（漳州）", company: "人保财险福建省分公司", city: "漳州", salary: "4K-8K", education: "本科", gradYear: "2026届", tags: ["校招", "保险", "央企", "财务"], isNew: false, date: "2026-04-14", publishDate: "2026-04-14", deadline: "2026-05-31", source: "https://www.zhaopin.com/jobdetail/CC199590610J40724990606.htm", sourceName: "智联招聘", requirements: "财务管理/会计/审计本科，中国人民财产保险福建省分公司漳州区县，央企正式编制" },
+        { id: "fin-q06", type: "finance", title: "财务专员-2026校招", company: "厦门港务控股集团", city: "厦门", salary: "7K-12K", education: "本科", gradYear: "2026届", tags: ["校招", "国企", "港口", "财务"], isNew: false, date: "2026-04-14", publishDate: "2026-03-09", deadline: "2026-05-31", source: "https://www.yingjiesheng.com/zhuanye/huanjing/fujian/", sourceName: "应届生求职网", requirements: "财政/金融/工商类本科，厦门大型市属国企，港口物流财务方向" },
+        // ===== 下午补充 - 环境工程类 - 环保/安环 =====
+        { id: "env-q08", type: "env", title: "安全环保专员（校招）", company: "福泉厦钨新能源科技有限公司", city: "厦门", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["校招", "国企", "安环", "新能源"], isNew: false, date: "2026-04-14", publishDate: "2026-03-09", deadline: "2026-06-30", source: "https://www.yingjiesheng.com/zhuanye/huanjing/fujian/", sourceName: "应届生求职网", requirements: "环境工程/安全工程本科，厦钨新能源（厦门）安环方向" },
+        { id: "env-q09", type: "env", title: "环境工程师（校招）", company: "福建泉州闽光钢铁有限责任公司", city: "泉州", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["校招", "国企", "钢铁", "环保"], isNew: false, date: "2026-04-14", publishDate: "2026-03-14", deadline: "2026-06-30", source: "https://www.yingjiesheng.com/zhuanye/huanjing/fujian/", sourceName: "应届生求职网", requirements: "环境工程本科，泉州闽光钢铁环保治理方向" },
+        { id: "env-q10", type: "env", title: "安全环保专员（校招）", company: "青拓集团有限公司", city: "宁德", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["校招", "民企", "钢铁", "安环"], isNew: false, date: "2026-04-14", publishDate: "2026-03-09", deadline: "2026-06-30", source: "https://www.yingjiesheng.com/zhuanye/huanjing/fujian/", sourceName: "应届生求职网", requirements: "环境工程/安全工程本科，青拓集团（宁德福安）安环方向" },
+        // ===== 下午补充 - 环境工程类 - 低碳/绿色 =====
+        { id: "env-q11", type: "env", title: "环保研究技术工程师", company: "华南师范大学南安绿色低碳研究院", city: "泉州", salary: "7K-12K", education: "本科", gradYear: "2027届", tags: ["校招", "科研", "低碳", "绿色"], isNew: false, date: "2026-04-14", publishDate: "2026-01-29", deadline: "2026-06-30", source: "https://www.yingjiesheng.com/zhuanye/huanjing/fujian/", sourceName: "应届生求职网", requirements: "环境工程/化学本科，泉州南安绿色低碳研究院，低碳技术研发方向" },
+        { id: "env-q12", type: "env", title: "2026届环保工程师", company: "厦门松霖科技股份有限公司", city: "厦门/漳州", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["校招", "上市公司", "环保"], isNew: false, date: "2026-04-14", publishDate: "2026-01-19", deadline: "2026-06-30", source: "https://www.yingjiesheng.com/zhuanye/huanjing/fujian/", sourceName: "应届生求职网", requirements: "环境工程本科，松霖科技（厦门/漳州）环保工程方向，上市公司" },
+        // ===== 下午补充 - 生态环境厅/事业编 =====
+        { id: "env-q13", type: "env", title: "专业技术岗（生态环境信息中心）", company: "福建省生态环境信息中心", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["事业单位", "非编", "环保", "信息"], isNew: false, date: "2026-04-14", publishDate: "2026-03-26", deadline: "2026-05-15", source: "https://sthjt.fujian.gov.cn/zwgk/rsxx/202603/t20260326_7115886.htm", sourceName: "福建省生态环境厅", requirements: "环境/计算机/信息管理本科及以上，省生态环境信息中心非编技术岗" },
+    ],
+
+    "2026-04-15": [
+        // ===== 财务管理类 (2026届本科) - 银行春招 =====
+        { id: "fin-r01", type: "finance", title: "客服经理岗-春招", company: "中国工商银行福建省分行", city: "福建全省", salary: "7K-11K", education: "本科", gradYear: "2026届", tags: ["春招", "银行", "四大行", "笔试4.18"], isNew: true, date: "2026-04-15", publishDate: "2026-03-12", deadline: "2026-05-15", source: "https://fj.huatu.com/2026/0312/2511460.html", sourceName: "华图福建", requirements: "本科及以上学历，福建8地市+12分支机构共145人，4月18日笔试，含星辰管培/专业英才/科技菁英/客户经理/客服经理" },
+        { id: "fin-r02", type: "finance", title: "综合柜员/客户经理-春招", company: "中信银行福州分行", city: "福州", salary: "7K-13K", education: "本科", gradYear: "2026届", tags: ["春招", "银行", "股份制"], isNew: true, date: "2026-04-15", publishDate: "2026-03-03", deadline: "2026-05-15", source: "http://www.yinhangzhaopin.com/zxyh/2026-03-03/213844.htm", sourceName: "银行招聘网", requirements: "本科及以上学历，含管理培训生/客户经理/柜员岗，中信银行福州分行春招" },
+        { id: "fin-r03", type: "finance", title: "柜面服务类-春招", company: "厦门银行", city: "厦门/福州/重庆", salary: "6K-10K", education: "本科", gradYear: "2026届", tags: ["春招", "银行", "上市城商行"], isNew: true, date: "2026-04-15", publishDate: "2026-04-08", deadline: "2026-05-31", source: "https://www.quanzhi.com/notice/69d01bbb85fb8af095bdf2c8", sourceName: "全职招聘网", requirements: "2026届本科，福建省首家上市城商行(601187)，含管培生/市场营销/柜面服务类" },
+        // ===== 财务管理类 (2026届本科) - 国企 =====
+        { id: "fin-r04", type: "finance", title: "业务开发岗（财务/金融方向）", company: "福建省华兴投资管理有限公司", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2026届", tags: ["校招", "省属国企", "财务", "金融"], isNew: true, date: "2026-04-15", publishDate: "2026-04-14", deadline: "2026-04-25", source: "https://xiamen.huatu.com/2026/0414/2512268.html", sourceName: "华图教育", requirements: "本科及以上，财政金融/统计/会计审计/法学类专业，省属国企华兴集团子公司" },
+        { id: "fin-r05", type: "finance", title: "风控审查岗（财务/审计方向）", company: "福建省华兴投资管理有限公司", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2026届", tags: ["校招", "省属国企", "风控", "财务"], isNew: true, date: "2026-04-15", publishDate: "2026-04-14", deadline: "2026-04-25", source: "https://xiamen.huatu.com/2026/0414/2512268.html", sourceName: "华图教育", requirements: "本科及以上，法学/财政金融/会计审计类专业，省属国企华兴集团子公司" },
+        { id: "fin-r06", type: "finance", title: "业务管理岗（财务方向）", company: "福乐达实业有限公司（华兴集团子公司）", city: "福州", salary: "5K-8K", education: "本科", gradYear: "2026届", tags: ["校招", "国企", "财务"], isNew: true, date: "2026-04-15", publishDate: "2026-04-14", deadline: "2026-04-25", source: "https://xiamen.huatu.com/2026/0414/2512268.html", sourceName: "华图教育", requirements: "本科及以上，经济贸易/财政金融/会计审计/电商物流类专业，华兴集团子公司" },
+        // ===== 环境工程类 (2027届本科/硕士) - 双碳/碳产业重点 =====
+        { id: "env-r01", type: "env", title: "碳产业运营专员（校招）", company: "莆田闽投碳产业投资有限公司", city: "莆田", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["校招", "省属国企", "碳产业", "双碳", "CO2回收"], isNew: true, date: "2026-04-15", publishDate: "2026-04-14", deadline: "2026-04-25", source: "https://fj.huatu.com/2026/0414/2512250.html", sourceName: "华图福建", requirements: "工学或理学类本科及以上，福建投资集团下属，CO2尾气回收综合利用项目运营维护，8人" },
+        { id: "env-r02", type: "env", title: "绿色低碳工程师（校招）", company: "中国检验认证集团福建有限公司", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["校招", "央企", "碳排放", "碳核查", "低碳"], isNew: true, date: "2026-04-15", publishDate: "2026-04-01", deadline: "2026-06-30", source: "https://www.zhaopin.com/zhaopin/896cbd35d7394988b1c4dfe3c3625f7b/", sourceName: "智联招聘", requirements: "环境/能源本科，碳排放核算与报告编制，配合第三方核查及碳资产管理，央企检验认证" },
+        { id: "env-r03", type: "env", title: "体系审核员（能源/环境方向）", company: "中国检验认证集团福建有限公司", city: "厦门", salary: "8K-12K", education: "本科", gradYear: "2027届", tags: ["校招", "央企", "能源体系", "审核", "认证"], isNew: true, date: "2026-04-15", publishDate: "2026-04-01", deadline: "2026-06-30", source: "https://www.zhaopin.com/zhaopin/896cbd35d7394988b1c4dfe3c3625f7b/", sourceName: "智联招聘", requirements: "环境/能源/管理本科，按国内国际标准进行能源/环境管理体系认证审核，央企" },
+        // ===== 环境工程类 (2027届) - 事业单位 =====
+        { id: "env-r04", type: "env", title: "生态环境岗（事业编）", company: "福州市生态环境局直属事业单位", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["事业单位", "编制", "环保", "即将截止"], isNew: true, date: "2026-04-15", publishDate: "2026-03-20", deadline: "2026-04-25", source: "https://www.sohu.com/a/999593271_121106994", sourceName: "福州生态环境", requirements: "环境工程/环境科学本科及以上，453家事业单位共725人，含福州市生态环境局直属5岗5人，事业编" },
+        { id: "env-r05", type: "env", title: "环境监测岗（事业编）", company: "福州市闽侯生态环境局", city: "福州", salary: "5K-8K", education: "本科", gradYear: "2027届", tags: ["事业单位", "编外", "环保", "即将截止"], isNew: true, date: "2026-04-15", publishDate: "2026-04-10", deadline: "2026-04-16", source: "https://fj.huatu.com/2026/0410/2512082.html", sourceName: "华图福建", requirements: "全日制本科及以上，中国语言文学/会计与审计类专业，闽侯生态环境局编外2人（含行政辅助岗）" },
+        // ===== 环境工程类 (2027届) - 环保/水务 =====
+        { id: "env-r06", type: "env", title: "水处理技术岗（校招）", company: "福州市自来水有限公司", city: "福州", salary: "6K-10K", education: "本科", gradYear: "2027届", tags: ["校招", "国企", "水务", "水处理"], isNew: true, date: "2026-04-15", publishDate: "2026-04-14", deadline: "2026-04-21", source: "https://fj.huatu.com/zt/fjggk/2026_04_883_0.html", sourceName: "华图福建", requirements: "环境工程/给排水本科，福州市自来水公司2人，国企水务运营方向" },
+        { id: "env-r07", type: "env", title: "环保检测技术员（校招）", company: "福建省中孚检测技术有限公司", city: "福州", salary: "5K-8K", education: "本科", gradYear: "2027届", tags: ["校招", "民企", "检测", "环保"], isNew: true, date: "2026-04-15", publishDate: "2026-03-27", deadline: "2026-06-30", source: "https://www.quanzhi.com/notice/69c5ae154d195df713dd8918", sourceName: "全职招聘网", requirements: "环境/化学/土木本科，综合性第三方检验检测机构，建设工程/交通/水利/消防检测" },
+        // ===== 环境工程类 (2027届硕士) - 双碳实习 =====
+        { id: "env-r08", type: "env", title: "碳业务规划设计师（实习）", company: "中国电建集团福建省电力勘测设计院", city: "福州", salary: "80-120元/天", education: "硕士", gradYear: "2027届", tags: ["实习", "央企", "双碳", "碳业务", "电力"], isNew: true, date: "2026-04-15", publishDate: "2026-04-01", deadline: "2026-07-31", source: "https://www.zhaopin.com/zhaopin/896cbd35d7394988b1c4dfe3c3625f7b/", sourceName: "智联招聘", requirements: "环境/能源经济硕士，碳减排项目方案设计/减排机理调研/数据处理，央企设计院实习" },
+    ],
+
+    // ===== 新日期的数据在此追加 =====
+};
+
+// ========== 当前状态 ==========
+let currentFilter = 'all';
+let currentDate = '';
+let availableDates = [];
+
+// ========== 搜索与筛选 ==========
+let searchKeyword = '';
+let cityFilterVal = '';
+let salaryFilterVal = '';
+let eduFilterVal = '';
+let statusFilterVal = '';
+
+function parseSalaryMin(salaryStr) {
+    const m = salaryStr.match(/([\d.]+)\s*K/i);
+    return m ? parseFloat(m[1]) : 0;
+}
+
+function parseSalaryMax(salaryStr) {
+    const matches = salaryStr.match(/([\d.]+)\s*K/gi);
+    if (matches && matches.length >= 2) {
+        return parseFloat(matches[1].replace(/K/i, ''));
     }
-];
+    return parseSalaryMin(salaryStr);
+}
+
+function getJobStatus(job) {
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    if (job.deadline && job.deadline !== '长期有效' && job.deadline !== '不限' && job.deadline !== '招满即止') {
+        const dl = new Date(job.deadline);
+        if (isNaN(dl.getTime())) return 'open';
+        dl.setHours(0,0,0,0);
+        const diff = (dl - today) / (1000*60*60*24);
+        if (diff < 0) return 'closed';
+        if (diff <= 7) return 'expiring';
+    }
+    return 'open';
+}
+
+function matchesSearch(job, keyword) {
+    if (!keyword) return true;
+    const kw = keyword.toLowerCase();
+    return (
+        (job.title && job.title.toLowerCase().includes(kw)) ||
+        (job.company && job.company.toLowerCase().includes(kw)) ||
+        (job.city && job.city.toLowerCase().includes(kw)) ||
+        (job.requirements && job.requirements.toLowerCase().includes(kw)) ||
+        (job.tags && job.tags.some(t => t.toLowerCase().includes(kw))) ||
+        (job.sourceName && job.sourceName.toLowerCase().includes(kw))
+    );
+}
+
+function matchesSalaryFilter(job, filter) {
+    if (!filter) return true;
+    const [minK, maxK] = filter.split('-').map(Number);
+    const jobMin = parseSalaryMin(job.salary);
+    const jobMax = parseSalaryMax(job.salary);
+    return jobMin <= maxK && jobMax >= minK;
+}
+
+function matchesEduFilter(job, filter) {
+    if (!filter) return true;
+    return job.education && job.education.includes(filter);
+}
+
+function matchesStatusFilter(job, filter) {
+    if (!filter) return true;
+    return getJobStatus(job) === filter;
+}
+
+function getAllJobs() {
+    // 获取所有历史日期的全部岗位
+    return Object.values(HISTORICAL_DATA).flat();
+}
+
+function getFilteredJobs() {
+    // 搜索/筛选时搜索所有历史岗位，否则按当前日期浏览
+    const hasSearchOrFilter = searchKeyword || cityFilterVal || salaryFilterVal || eduFilterVal || statusFilterVal;
+    let jobs = hasSearchOrFilter ? getAllJobs() : getCurrentJobs();
+
+    if (currentFilter === 'finance') {
+        jobs = jobs.filter(j => j.type === 'finance');
+    } else if (currentFilter === 'env') {
+        jobs = jobs.filter(j => j.type === 'env');
+    } else if (currentFilter === 'expiring') {
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        jobs = jobs.filter(j => {
+            if (!j.deadline) return false;
+            const dl = new Date(j.deadline);
+            dl.setHours(0,0,0,0);
+            const diff = (dl - today) / (1000*60*60*24);
+            return diff >= 0 && diff <= 7;
+        });
+        jobs.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+    }
+
+    // 去重（搜索全部时可能有跨日期重复）
+    if (hasSearchOrFilter) {
+        const seen = new Set();
+        jobs = jobs.filter(j => {
+            if (seen.has(j.id)) return false;
+            seen.add(j.id);
+            return true;
+        });
+    }
+
+    jobs = jobs.filter(j => matchesSearch(j, searchKeyword));
+    if (cityFilterVal) jobs = jobs.filter(j => j.city === cityFilterVal);
+    jobs = jobs.filter(j => matchesSalaryFilter(j, salaryFilterVal));
+    jobs = jobs.filter(j => matchesEduFilter(j, eduFilterVal));
+    jobs = jobs.filter(j => matchesStatusFilter(j, statusFilterVal));
+    return jobs;
+}
+
+function applyFilters() {
+    searchKeyword = document.getElementById('searchInput').value.trim();
+    cityFilterVal = document.getElementById('cityFilter').value;
+    salaryFilterVal = document.getElementById('salaryFilter').value;
+    eduFilterVal = document.getElementById('eduFilter').value;
+    statusFilterVal = document.getElementById('statusFilter').value;
+    currentPage = 1;
+    renderJobs();
+    updateActiveFilters();
+}
+
+function clearAllFilters() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('cityFilter').value = '';
+    document.getElementById('salaryFilter').value = '';
+    document.getElementById('eduFilter').value = '';
+    document.getElementById('statusFilter').value = '';
+    searchKeyword = '';
+    cityFilterVal = '';
+    salaryFilterVal = '';
+    eduFilterVal = '';
+    statusFilterVal = '';
+    currentPage = 1;
+    renderJobs();
+    updateActiveFilters();
+}
+
+function removeFilter(type) {
+    if (type === 'search') { document.getElementById('searchInput').value = ''; searchKeyword = ''; }
+    else if (type === 'city') { document.getElementById('cityFilter').value = ''; cityFilterVal = ''; }
+    else if (type === 'salary') { document.getElementById('salaryFilter').value = ''; salaryFilterVal = ''; }
+    else if (type === 'edu') { document.getElementById('eduFilter').value = ''; eduFilterVal = ''; }
+    else if (type === 'status') { document.getElementById('statusFilter').value = ''; statusFilterVal = ''; }
+    currentPage = 1;
+    renderJobs();
+    updateActiveFilters();
+}
+
+function updateActiveFilters() {
+    const container = document.getElementById('activeFilters');
+    const chips = [];
+    if (searchKeyword) chips.push('<span class="active-filter-chip">🔍 "' + searchKeyword + '" <span class="remove-filter" onclick="removeFilter(\'search\')">✕</span></span>');
+    if (cityFilterVal) chips.push('<span class="active-filter-chip">🏙️ ' + cityFilterVal + ' <span class="remove-filter" onclick="removeFilter(\'city\')">✕</span></span>');
+    if (salaryFilterVal) {
+        const labels = {'0-5':'5K以下','5-8':'5K-8K','8-12':'8K-12K','12-999':'12K以上'};
+        chips.push('<span class="active-filter-chip">💰 ' + labels[salaryFilterVal] + ' <span class="remove-filter" onclick="removeFilter(\'salary\')">✕</span></span>');
+    }
+    if (eduFilterVal) chips.push('<span class="active-filter-chip">🎓 ' + eduFilterVal + ' <span class="remove-filter" onclick="removeFilter(\'edu\')">✕</span></span>');
+    if (statusFilterVal) {
+        const labels = {'open':'正在招聘','expiring':'即将截止','closed':'已截止'};
+        chips.push('<span class="active-filter-chip">⏰ ' + labels[statusFilterVal] + ' <span class="remove-filter" onclick="removeFilter(\'status\')">✕</span></span>');
+    }
+    if (chips.length > 1) chips.push('<button class="clear-all-btn" onclick="clearAllFilters()">清除全部</button>');
+    container.innerHTML = chips.join('');
+}
+
+function populateCityFilter() {
+    const allJobs = Object.values(HISTORICAL_DATA).flat();
+    const cities = [...new Set(allJobs.map(j => j.city))].sort();
+    const select = document.getElementById('cityFilter');
+    select.innerHTML = '<option value="">全部城市</option>';
+    cities.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c;
+        select.appendChild(opt);
+    });
+}
+
+// 初始化日期列表
+function initDates() {
+    availableDates = Object.keys(HISTORICAL_DATA).sort().reverse();
+    currentDate = availableDates[0] || getTodayStr();
+    updateDateSelector();
+}
+
+function getTodayStr() {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+}
+
+function formatDateCN(dateStr) {
+    const parts = dateStr.split('-');
+    const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
+    const d = new Date(dateStr);
+    return `${parts[0]}年${parseInt(parts[1])}月${parseInt(parts[2])}日 星期${weekDays[d.getDay()]}`;
+}
+
+function updateDateSelector() {
+    const select = document.getElementById('dateSelector');
+    select.innerHTML = '';
+    availableDates.forEach(date => {
+        const opt = document.createElement('option');
+        opt.value = date;
+        opt.textContent = formatDateCN(date);
+        if (date === currentDate) opt.selected = true;
+        select.appendChild(opt);
+    });
+    const idx = availableDates.indexOf(currentDate);
+    document.getElementById('prevDay').disabled = idx >= availableDates.length - 1;
+    document.getElementById('nextDay').disabled = idx <= 0;
+}
+
+function changeDate(offset) {
+    const idx = availableDates.indexOf(currentDate);
+    const newIdx = idx + offset;
+    if (newIdx >= 0 && newIdx < availableDates.length) {
+        currentDate = availableDates[newIdx];
+        updateDateSelector();
+        renderAll();
+    }
+}
+
+function jumpToDate(date) {
+    if (date && HISTORICAL_DATA[date]) {
+        currentDate = date;
+        currentPage = 1;
+        updateDateSelector();
+        renderAll();
+    }
+}
+
+// ========== 截止日期相关 ==========
+function getDeadlineStatus(deadline) {
+    if (!deadline || deadline === '长期有效' || deadline === '不限' || deadline === '招满即止') return { status: 'none', label: '长期有效', daysLeft: Infinity };
+    const now = new Date();
+    now.setHours(0,0,0,0);
+    const dl = new Date(deadline);
+    dl.setHours(0,0,0,0);
+    if (isNaN(dl.getTime())) return { status: 'none', label: deadline || '', daysLeft: Infinity };
+    const diff = Math.ceil((dl - now) / (1000 * 60 * 60 * 24));
+
+    if (diff < 0) return { status: 'expired', label: '已截止', daysLeft: diff };
+    if (diff === 0) return { status: 'urgent', label: '今日截止', daysLeft: 0 };
+    if (diff <= 3) return { status: 'urgent', label: `${diff}天后截止`, daysLeft: diff };
+    if (diff <= 7) return { status: 'warning', label: `${diff}天后截止`, daysLeft: diff };
+    return { status: 'normal', label: `${diff}天后截止`, daysLeft: diff };
+}
+
+function isExpiring(job) {
+    const dl = getDeadlineStatus(job.deadline);
+    return dl.status === 'urgent' || dl.status === 'warning';
+}
 
 // ========== 渲染逻辑 ==========
-let currentFilter = 'all';
+let currentPage = 1;
+const PAGE_SIZE = 8;
+
+function getCurrentJobs() {
+    return HISTORICAL_DATA[currentDate] || [];
+}
 
 function filterJobs(type) {
     currentFilter = type;
-    // 更新tab样式
     document.querySelectorAll('.tab').forEach(t => {
         t.className = 'tab';
     });
     if (type === 'all') event.target.classList.add('active-all');
     else if (type === 'finance') event.target.classList.add('active-finance');
-    else event.target.classList.add('active-env');
+    else if (type === 'env') event.target.classList.add('active-env');
+    else event.target.classList.add('active-all');
+    currentPage = 1;
     renderJobs();
 }
 
 function renderJobs() {
     const container = document.getElementById('jobList');
-    let filtered = currentFilter === 'all' ? JOBS_DATA : JOBS_DATA.filter(j => j.type === currentFilter);
+    const filtered = getFilteredJobs();
+    const allDateJobs = getCurrentJobs();
 
     const financeJobs = filtered.filter(j => j.type === 'finance');
     const envJobs = filtered.filter(j => j.type === 'env');
+    const isLatest = currentDate === availableDates[0];
+    const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+
+    if (currentPage > totalPages) currentPage = Math.max(1, totalPages);
+    if (currentPage < 1) currentPage = 1;
+
+    const startIdx = (currentPage - 1) * PAGE_SIZE;
+    const endIdx = startIdx + PAGE_SIZE;
+    const pageJobs = filtered.slice(startIdx, endIdx);
+    const pageFinance = pageJobs.filter(j => j.type === 'finance');
+    const pageEnv = pageJobs.filter(j => j.type === 'env');
+
+    // 搜索结果信息
+    const infoEl = document.getElementById('searchResultInfo');
+    const hasFilters = searchKeyword || cityFilterVal || salaryFilterVal || eduFilterVal || statusFilterVal;
+    if (hasFilters) {
+        const allTotal = getAllJobs().length;
+        infoEl.innerHTML = '在全部 <strong>' + allTotal + '</strong> 个历史岗位中找到 <strong>' + filtered.length + '</strong> 个匹配岗位';
+    } else {
+        infoEl.innerHTML = '';
+    }
 
     let html = '';
 
-    if (financeJobs.length > 0) {
+    if (currentFilter === 'expiring') {
+        const sorted = [...pageJobs].sort((a,b) => {
+            const da = a.deadline ? new Date(a.deadline) : new Date('2099-12-31');
+            const db = b.deadline ? new Date(b.deadline) : new Date('2099-12-31');
+            return da - db;
+        });
         html += `
         <div class="section-title finance">
-            <div class="icon">💰</div>
-            <h2>财务管理岗位（2026届本科）</h2>
-            <span class="badge">${financeJobs.length} 个岗位</span>
+            <div class="icon">⏰</div>
+            <h2>即将截止的岗位</h2>
+            <span class="badge">${filtered.length} 个岗位</span>
         </div>
         <div class="job-grid">
-            ${financeJobs.map(j => renderCard(j)).join('')}
+            ${sorted.map(j => renderCard(j, isLatest)).join('')}
         </div>`;
-    }
+    } else {
+        if (pageFinance.length > 0) {
+            html += `
+            <div class="section-title finance">
+                <div class="icon">💰</div>
+                <h2>财务管理岗位（2026届本科）</h2>
+                <span class="badge">${financeJobs.length} 个岗位</span>
+            </div>
+            <div class="job-grid">
+                ${pageFinance.map(j => renderCard(j, isLatest)).join('')}
+            </div>`;
+        }
 
-    if (envJobs.length > 0) {
-        html += `
-        <div class="section-title env">
-            <div class="icon">🌿</div>
-            <h2>环境工程岗位（2027届硕士）</h2>
-            <span class="badge">${envJobs.length} 个岗位</span>
-        </div>
-        <div class="job-grid">
-            ${envJobs.map(j => renderCard(j)).join('')}
-        </div>`;
+        if (pageEnv.length > 0) {
+            html += `
+            <div class="section-title env">
+                <div class="icon">🌿</div>
+                <h2>环境工程岗位（2027届本科/硕士）</h2>
+                <span class="badge">${envJobs.length} 个岗位</span>
+            </div>
+            <div class="job-grid">
+                ${pageEnv.map(j => renderCard(j, isLatest)).join('')}
+            </div>`;
+        }
     }
 
     if (filtered.length === 0) {
+        const emptyMsg = hasFilters ? '没有找到匹配的岗位，试试调整筛选条件' :
+            (currentFilter === 'expiring' ? '暂无即将截止的岗位' : '该日期暂无招聘数据');
         html = `
         <div class="empty-state">
             <div class="emoji">🔍</div>
-            <p>暂无相关岗位，请稍后再查看</p>
+            <p>${emptyMsg}</p>
         </div>`;
+    }
+
+    if (totalPages > 1) {
+        html += renderPagination(currentPage, totalPages, filtered.length);
     }
 
     container.innerHTML = html;
 }
 
-function renderCard(job) {
+function renderPagination(current, total, itemCount) {
+    let html = '<div class="pagination">';
+    
+    // 上一页
+    html += `<button onclick="goToPage(${current - 1})" ${current <= 1 ? 'disabled' : ''}>‹ 上一页</button>`;
+
+    // 页码按钮
+    let pages = [];
+    if (total <= 7) {
+        for (let i = 1; i <= total; i++) pages.push(i);
+    } else {
+        pages.push(1);
+        if (current > 3) pages.push('...');
+        let start = Math.max(2, current - 1);
+        let end = Math.min(total - 1, current + 1);
+        for (let i = start; i <= end; i++) pages.push(i);
+        if (current < total - 2) pages.push('...');
+        pages.push(total);
+    }
+
+    pages.forEach(p => {
+        if (p === '...') {
+            html += `<button disabled>…</button>`;
+        } else {
+            html += `<button class="${p === current ? 'active' : ''}" onclick="goToPage(${p})">${p}</button>`;
+        }
+    });
+
+    // 下一页
+    html += `<button onclick="goToPage(${current + 1})" ${current >= total ? 'disabled' : ''}>下一页 ›</button>`;
+
+    // 页码信息
+    html += `<span class="page-info">共 ${itemCount} 条</span>`;
+
+    html += '</div>';
+    return html;
+}
+
+function goToPage(page) {
+    currentPage = page;
+    renderJobs();
+    // 滚动到岗位列表顶部
+    document.getElementById('jobList').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function renderCard(job, isLatest) {
     const tagHtml = job.tags.map(t => {
-        if (t === '热门') return `<span class="tag hot">🔥 ${t}</span>`;
-        if (job.isNew && t === '校招') return `<span class="tag new">🆕 今日</span>`;
+        if (t === '热门') return `<span class="tag hot">${t}</span>`;
+        if (isLatest && job.isNew && t === '校招') return `<span class="tag new">今日</span>`;
         return `<span class="tag ${job.type}">${t}</span>`;
     }).join('');
 
+    // 截止日期状态
+    const dlStatus = getDeadlineStatus(job.deadline);
+    let dlClass = 'normal';
+    let cardExtraClass = '';
+    let dlTagHtml = '';
+
+    if (dlStatus.status === 'expired') {
+        dlClass = 'expired';
+        cardExtraClass = ' deadline-expired';
+        dlTagHtml = `<span class="tag urgent">已截止</span>`;
+    } else if (dlStatus.status === 'urgent') {
+        dlClass = 'urgent';
+        cardExtraClass = ' deadline-urgent';
+        dlTagHtml = `<span class="tag urgent">${dlStatus.label}</span>`;
+    } else if (dlStatus.status === 'warning') {
+        dlClass = 'warning';
+        dlTagHtml = `<span class="tag expiring">${dlStatus.label}</span>`;
+    }
+
+    // 时间信息行
+    let timeInfoHtml = '<div class="time-info">';
+    if (job.publishDate) {
+        timeInfoHtml += `<span class="publish-time">发布: ${job.publishDate}</span>`;
+    }
+    if (job.deadline) {
+        timeInfoHtml += `<span class="deadline ${dlClass}">截止: ${job.deadline}</span>`;
+        if (dlStatus.status !== 'expired') {
+            const cdClass = dlStatus.status === 'urgent' ? 'countdown urgent' : (dlStatus.status === 'warning' ? 'countdown expiring' : 'countdown');
+            timeInfoHtml += `<span class="${cdClass}">${dlStatus.label}</span>`;
+        } else {
+            timeInfoHtml += `<span class="countdown expired">已截止</span>`;
+        }
+    }
+    timeInfoHtml += '</div>';
+
+    // 源网页链接
+    let sourceHtml = '';
+    if (job.source) {
+        sourceHtml = `<div class="source-link"><a href="${job.source}" target="_blank" rel="noopener noreferrer">🔗 查看原文：${job.sourceName || '招聘来源'}</a></div>`;
+    }
+
+    const dateTag = !isLatest ? `<span class="tag history">${job.date}</span>` : '';
+
     return `
-    <div class="job-card ${job.type}">
+    <div class="job-card ${job.type}${cardExtraClass}">
         <div class="tag-row">
-            ${tagHtml}
+            ${dateTag}${tagHtml}${dlTagHtml}
         </div>
         <h3>${job.title}</h3>
         <div class="company">${job.company}</div>
@@ -728,33 +1525,55 @@ function renderCard(job) {
             <span>📅 ${job.gradYear}</span>
         </div>
         <div class="salary">${job.salary}</div>
+        ${timeInfoHtml}
         <div class="requirements">📋 ${job.requirements}</div>
+        ${sourceHtml}
     </div>`;
 }
 
 function updateStats() {
-    const financeCount = JOBS_DATA.filter(j => j.type === 'finance').length;
-    const envCount = JOBS_DATA.filter(j => j.type === 'env').length;
-    const newCount = JOBS_DATA.filter(j => j.isNew).length;
+    const currentJobs = getCurrentJobs();
+    const allJobs = getAllJobs();
+    const financeCount = currentJobs.filter(j => j.type === 'finance').length;
+    const envCount = currentJobs.filter(j => j.type === 'env').length;
+    const totalFinanceAll = allJobs.filter(j => j.type === 'finance').length;
+    const totalEnvAll = allJobs.filter(j => j.type === 'env').length;
+    const newCount = currentJobs.filter(j => j.isNew).length;
+    const expiringCount = currentJobs.filter(j => isExpiring(j)).length;
 
     document.getElementById('financeCount').textContent = financeCount;
     document.getElementById('envCount').textContent = envCount;
-    document.getElementById('totalCount').textContent = financeCount + envCount;
+    document.getElementById('totalCount').textContent = totalFinanceAll + totalEnvAll;
     document.getElementById('newCount').textContent = newCount;
+    document.getElementById('expiringCount').textContent = expiringCount;
 }
 
-function updateTime() {
-    const now = new Date();
-    const dateStr = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;
-    const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
-    const weekDay = weekDays[now.getDay()];
-    document.getElementById('updateTime').textContent = `📅 ${dateStr} 星期${weekDay} 更新`;
+function renderHistoryBanner() {
+    const banner = document.getElementById('historyBanner');
+    const isLatest = currentDate === availableDates[0];
+
+    if (!isLatest) {
+        banner.innerHTML = `
+        <div class="history-banner">
+            <span class="emoji">📜</span>
+            <span>你正在查看 <strong>${formatDateCN(currentDate)}</strong> 的历史数据</span>
+            <a onclick="jumpToDate('${availableDates[0]}')">返回最新</a>
+        </div>`;
+    } else {
+        banner.innerHTML = '';
+    }
+}
+
+function renderAll() {
+    renderHistoryBanner();
+    updateStats();
+    renderJobs();
 }
 
 // 初始化
-updateTime();
-updateStats();
-renderJobs();
+initDates();
+populateCityFilter();
+renderAll();
 </script>
 
 </body>
